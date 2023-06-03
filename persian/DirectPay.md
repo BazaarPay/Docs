@@ -94,7 +94,7 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
 نهایی‌سازی کلاینت به `callBackUrl` ریدایرکت می‌شود.
 پس از ریدایرکت کاربر می‌توانید با استفاده از ای‌پی‌آی `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
 
-###### startFinalizeContractProccess Arguments:
+###### startFinalizeContractProcess Arguments:
 
 ```yaml
 arguments:
