@@ -29,9 +29,9 @@ paths:
                 description: دوره‌ی زمانی از ابتدا ماه، هفته ویا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود.
               amount_limit:
                 type: int
-                min_value: 100_000
-                max_value: 1_000_000_000
-                example: 1_000_000
+                min_value: 100000
+                max_value: 1000000000
+                example: 1000000
       responses:
         '200':
           content:
@@ -51,7 +51,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 --data-raw '{
     "type": "wallet"
     "period": "monthly"
-    "amount_limit": 1_000_000
+    "amount_limit": 1000000
 }'
 
 {"contract_token":"9bb790a3-44fd-486f-8ce8-38aa02cab069"}
