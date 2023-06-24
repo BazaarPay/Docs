@@ -162,6 +162,32 @@ paths:
                     - declined             # قراداد توسط کاربر رد شده است.
                     - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
                   example: "new"
+    get:
+      summary: trace-contract
+      parameters:
+        - in: query
+          name: contract_token
+          schema:
+            type: string
+          required: true
+          example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum:
+                      - new                  # قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد.
+                      - active               # راداد فعال است و می‌توان پرداخت‌مستقیم انجام داد.
+                      - declined             # قراداد توسط کاربر رد شده است.
+                      - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
+                    example: "new"
 ```
 
 مثال:
