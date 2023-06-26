@@ -162,6 +162,22 @@ paths:
                     - declined             # قراداد توسط کاربر رد شده است.
                     - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
                   example: "new"
+                  expiration_time:
+                    type: string
+                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                    example: 2024-06-25T09:28:34.668933Z
+                  limit_amount:
+                    type: integer
+                    description: ماکزیمم مبلغ در هر دوره
+                    example: 100000
+                  limit_remaining_amount:
+                    type: integer
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
+                    example: 98730
+                  limit_expiration_time:
+                    type: string
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+                    example: 2024-03-20T00:00:00Z
     get:
       summary: trace-contract
       parameters:
@@ -188,6 +204,22 @@ paths:
                       - declined             # قراداد توسط کاربر رد شده است.
                       - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
                     example: "new"
+                  expiration_time:
+                    type: string
+                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                    example: 2024-06-25T09:28:34.668933Z
+                  limit_amount:
+                    type: integer
+                    description: ماکزیمم مبلغ در هر دوره
+                    example: 100000
+                  limit_remaining_amount:
+                    type: integer
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
+                    example: 98730
+                  limit_expiration_time:
+                    type: string
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+                    example: 2024-03-20T00:00:00Z
 ```
 
 مثال:
