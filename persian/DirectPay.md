@@ -225,13 +225,10 @@ paths:
 مثال:
 
 ```bash
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace' \
-  --header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' \
-  --data-raw '{
-    "contract_token":"9bb790a3-44fd-486f-8ce8-38aa02cab069"
-}'
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=9bb790a3-44fd-486f-8ce8-38aa02cab069' \
+--header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' 
 
-{"state":"new"}
+{"state":"active","expiration_time":"2024-06-25T09:28:34.668933Z","amount_limit":100000,"limit_remaining_amount":98730,"limit_expiration_time":"2024-03-20T00:00:00Z"}
 ```
 
 #### Direct Pay:
