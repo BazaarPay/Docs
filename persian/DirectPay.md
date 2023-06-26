@@ -139,41 +139,57 @@ interface CallbackUrl {
 ```yaml
 paths:
   { base_url }/direct-pay/contract/trace/
-    post:
+    get:
       summary: trace-contract
-      requestBody:
-        content:
-          application/json:
-            schema:
-              contract_token:
-                type: string
-                example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
-                description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+      parameters:
+        - in: query
+          name: contract_token
+          schema:
+            type: string
+          required: true
+          example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
       responses:
         '200':
+          description: OK
           content:
             application/json:
               schema:
-                state:
-                  type: string
-                  enum:
-                    - new                  # قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد.
-                    - active               # راداد فعال است و می‌توان پرداخت‌مستقیم انجام داد.
-                    - declined             # قراداد توسط کاربر رد شده است.
-                    - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
-                  example: "new"
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum:
+                      - new                  # قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد.
+                      - active               # راداد فعال است و می‌توان پرداخت‌مستقیم انجام داد.
+                      - declined             # قراداد توسط کاربر رد شده است.
+                      - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
+                    example: "new"
+                  expiration_time:
+                    type: string
+                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                    example: 2024-06-25T09:28:34.668933Z
+                  limit_amount:
+                    type: integer
+                    description: ماکزیمم مبلغ در هر دوره
+                    example: 100000
+                  limit_remaining_amount:
+                    type: integer
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
+                    example: 98730
+                  limit_expiration_time:
+                    type: string
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+                    example: 2024-03-20T00:00:00Z
 ```
 
 مثال:
 
 ```bash
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace' \
-  --header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' \
-  --data-raw '{
-    "contract_token":"9bb790a3-44fd-486f-8ce8-38aa02cab069"
-}'
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=9bb790a3-44fd-486f-8ce8-38aa02cab069' \
+--header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' 
 
-{"state":"new"}
+{"state":"active","expiration_time":"2024-06-25T09:28:34.668933Z","amount_limit":100000,"limit_remaining_amount":98730,"limit_expiration_time":"2024-03-20T00:00:00Z"}
 ```
 
 #### Direct Pay:
