@@ -93,3 +93,12 @@ commit را صدا بزنید.
 - [Basic Payment Flow](./Payment.md)
 - [DirectPay](./DirectPay.md)
 - [Wallet Integration](./Wallet.md)
+
+```yaml
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    scheme: Token
+```

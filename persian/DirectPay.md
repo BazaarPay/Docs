@@ -202,7 +202,8 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 paths:
   { base_url }/direct-pay/
     post:
-      summary: trace-contract
+      summary: direct-pay
+      security: ApiKeyAuth
       requestBody:
         content:
           application/json:
@@ -214,7 +215,7 @@ paths:
               checkout_token:
                 type: string
                 example: "0123456789"
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+                description: checkout_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
       responses:
         '204':
           description: payment made successfully
