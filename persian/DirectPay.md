@@ -5,15 +5,22 @@
 
 #### Initiate contract:
 
-برای ساخت قرارداد دایرکت پی  پذیرنده (merchant) باید محدودیت حدکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند
+برای ساخت قرارداد دایرکت پی  پذیرنده (merchant) باید محدودیت حداکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند.
 
-به طور مثل اگر پذیرنده قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کن. بعد از امضای این قرارداد توسط کاربر پذیرنده حداکثر هفته ای ۱ میلیون تومان میتواند پرداخت مستقیم از حساب کاربر انجام دهد.
+به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
 
 ```yaml
 paths:
   { base_url }/direct-pay/contract/init/
     post:
       summary: initiate-contract
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Token { merchant_token }"
       requestBody:
         content:
           application/json:
@@ -25,8 +32,8 @@ paths:
               period:
                 type: string
                 enum: [ weekly, monthly, yearly ]
-                example: "monthly"          
-                description: دوره‌ی زمانی از ابتدا ماه، هفته ویا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود.
+                example: "monthly"
+                description: دوره‌ی زمانی از ابتدا ماه، هفته و یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود.
               amount_limit:
                 type: int
                 min_value: 100000
@@ -34,27 +41,41 @@ paths:
                 example: 1000000
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
                 contract_token:
                   type: string
                   example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                details:
+                  type: string
+                  example: "توکن هدر نامعتبر است."
+        
 ```
 
-example:
+Example cURL:
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' \
+--header 'Authorization: Token merchant_token' \
 --data-raw '{
     "type": "wallet"
     "period": "monthly"
     "amount_limit": 1000000
 }'
-
-{"contract_token":"9bb790a3-44fd-486f-8ce8-38aa02cab069"}
+```
+Example Success Response:
+```json
+{
+	"contract_token": "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+}
 ```
 
 #### Finalize Contract Without SDK:
