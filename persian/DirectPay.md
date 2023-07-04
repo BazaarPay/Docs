@@ -307,20 +307,16 @@ Success Response Example:
 استفاده کرد.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
 servers:
   - url: https://pardakht.cafebazaar.ir
 paths:
   /direct-pay/:
     post:
       summary: pay-with-contract
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            example: Token {merchant_token}
-          description: توکن احراز هویت مرچنت
       requestBody:
         content:
           application/json:
@@ -339,7 +335,14 @@ paths:
                   description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
       responses:
         '204':
-          description: payment made successfully
+          description: Success
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    scheme: Token
+    description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
