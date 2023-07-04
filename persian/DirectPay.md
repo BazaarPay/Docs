@@ -369,44 +369,58 @@ Success Response Example:
 
 #### Direct Pay:
 
-نیاز است که قبل از فراخوانی این ای‌پی‌آی، قرارداد رضایت کاربر تایید شده باشد. قبل از صدا زدن این ای‌پی‌آی باید توسط
-ای‌پی‌آی init checkout یه توکن چک‌اوت ساخته شده باشد. از این توکن مانند فرآیند عادی پرداخت برای Trace و Refund می‌توان
+نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
+اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
 
 ```yaml
+servers:
+  - url: https://pardakht.cafebazaar.ir
 paths:
-  { base_url }/direct-pay/
+  /direct-pay/:
     post:
-      summary: trace-contract
+      summary: pay-with-contract
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Token {merchant_token}
+          description: توکن احراز هویت مرچنت
       requestBody:
         content:
           application/json:
             schema:
-              contract_token:
-                type: string
-                example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
-                description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
-              checkout_token:
-                type: string
-                example: "0123456789"
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+              type: object
+              properties:
+                contract_token:
+                  type: string
+                  required: true
+                  example: 9bb790a3-44fd-486f-8ce8-38aa0scab069
+                  description: توکن قرارداد گرفته شده از اندپوینت Init Contract
+                checkout_token:
+                  type: string
+                  required: true
+                  example: "0123456789"
+                  description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
       responses:
         '204':
           description: payment made successfully
 ```
 
-مثال:
+cURL Example:
 
-```bash
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
-  --header 'Content-Type: application/json' \
-  --data-raw '{
-    "contract_token": "9bb790a3-44fd-486f-8ce8-38aa02cab069",
-    "checkout_token": "0123456789"
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
+--header 'Authorization: Token {merchant_token}' \
+--data '{
+    "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
+    "checkout_token": "1443280167"
 }'
 ```
 
 در صورت موفقیت، یک Body خالی را برمی‌گرداند.
 نسبت به توکن چک‌اوت، idempotent است.
-تفاوت این روش با پرداخت عادی که از طریق sdk توسط کاربر انجام می‌شود این است که نیازی به فراخوانی ای‌پی‌آی commit نیست و
-اتوماتیک کامیت می‌شود. بنابراین بهتر است این ای‌پی‌آی بعد از ارائه‌ی محصول به کاربر و در یک تراکنش اتمیک فراخوانی گردد.
+تفاوت این روش با پرداخت عادی که از طریق sdk توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
+اتوماتیک کامیت می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش اتمیک فراخوانی گردد.
