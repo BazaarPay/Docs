@@ -10,8 +10,10 @@
 به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
 
 ```yaml
+server:
+  - url: https://pardakht.cafebazaar.ir
 paths:
-  { base_url }/direct-pay/contract/init/
+  /pardakht/badje/v1/direct-pay/contract/init/:
     post:
       summary: initiate-contract
       parameters:
@@ -20,21 +22,32 @@ paths:
           required: true
           schema:
             type: string
-            example: "Token { merchant_token }"
+            example: Token { merchant_token }
+          description: توکن احراز هویت مرچنت
       requestBody:
         content:
           application/json:
             schema:
               type:
+                required: true
                 type: string
                 enum: [ direct_debit, wallet ]
                 example: "wallet"
               period:
+                required: true
                 type: string
-                enum: [ weekly, monthly, yearly ]
+                enum: 
+                  - weekly
+                  - monthly
+                  - yearly
                 example: "monthly"
-                description: دوره‌ی زمانی از ابتدا ماه، هفته و یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود.
+                description: |
+                  دوره‌ی زمانی از ابتدا ماه، هفته و یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود، مقادیر مجاز شامل:
+                  - weekly: هفتگی، هر شنبه این مقدار ریست می‌شود
+                  - monthly: ماهانه، اول ماه این مقدار ریست می‌شود
+                  - yearly: سالانه، اول سال ریست می‌شود
               amount_limit:
+                required: true
                 type: int
                 min_value: 100000
                 max_value: 1000000000
@@ -47,7 +60,7 @@ paths:
               schema:
                 contract_token:
                   type: string
-                  example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+                  example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
         '401':
           description: Unauthorized
           content:
@@ -55,23 +68,24 @@ paths:
               schema:
                 details:
                   type: string
-                  example: "توکن هدر نامعتبر است."
-        
+                  example: توکن هدر نامعتبر است.
+
 ```
 
-Example cURL:
+cURL Example:
 
 ```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init' \
---header 'Content-Type: application/json' \
---header 'Authorization: Token merchant_token' \
+--header 'Authorization: Token {merchant_token}' \
 --data-raw '{
     "type": "wallet"
     "period": "monthly"
     "amount_limit": 1000000
 }'
 ```
-Example Success Response:
+
+Success Response Example:
+
 ```json
 {
 	"contract_token": "9bb790a3-44fd-486f-8ce8-38aa02cab069"
