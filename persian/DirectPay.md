@@ -288,20 +288,22 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 ```
 
 Success Response Example:
+
 ```json
 {
-    "state": "declined",
-    "expiration_time": "2024-07-02T06:43:44.843212Z",
-    "amount_limit": 100000,
-    "limit_remaining_amount": 100000,
-    "limit_expiration_time": "2025-07-02T06:43:44.843212Z"
+	"state": "declined",
+	"expiration_time": "2024-07-02T06:43:44.843212Z",
+	"amount_limit": 100000,
+	"limit_remaining_amount": 100000,
+	"limit_expiration_time": "2025-07-02T06:43:44.843212Z"
 }
 ```
 
 #### Direct Pay:
 
 نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
-اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در اندپوینت‌های Trace و Refund نیز
+اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در
+اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
 
 ```yaml
