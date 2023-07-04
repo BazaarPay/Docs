@@ -119,20 +119,17 @@ Success Response Example:
 ریدایرکت می‌شود.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
 servers:
-  - url: https://cafebazaar.ir
+  - url: 'https://cafebazaar.ir'
 paths:
   /bazaar-pay/contract/direct-pay:
     post:
       summary: finalize-contract-without-sdk
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            example: Bearer { user_token }
-          description: توکن احراز هویت کاربر
         - name: token
           in: query
           required: true
@@ -146,13 +143,13 @@ paths:
           description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
           schema:
             type: string
-            example: "https://example.com/bazaar-pay-return/direct-pay-contract"
+            example: https://example.com/bazaar-pay-return/direct-pay-contract
         - name: phone_number
           in: query
           required: false
           schema:
             type: string
-            example: "09999999999"
+            example: 09999999999
           description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
 ```
 
