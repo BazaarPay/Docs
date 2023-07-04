@@ -199,21 +199,30 @@ interface CallbackUrl {
 #### Trace Contract (Get Method):
 
 ```yaml
+servers:
+  - url: https://pardakht.cafebazaar.ir
 paths:
-  { base_url }/direct-pay/contract/trace/
+  /pardakht/badje/v1/direct-pay/contract/trace/:
     get:
       summary: trace-contract
       parameters:
-        - in: query
-          name: contract_token
+        - name: Authorization
+          in: header
+          required: true
           schema:
             type: string
+            example: Token {merchant_token}
+          description: توکن احراز هویت مرچنت
+        - name: contract_token
+          in: query
           required: true
-          example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
-          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+          schema:
+            type: string
+            example: af72319b-9baf-4c2b-9dbf-76cf119a4582          
+          description: توکن قرارداد گرفته شده از اندپوینت Init Contract
       responses:
         '200':
-          description: OK
+          description: Success
           content:
             application/json:
               schema:
@@ -222,36 +231,140 @@ paths:
                   state:
                     type: string
                     enum:
-                      - new                  # قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد.
-                      - active               # راداد فعال است و می‌توان پرداخت‌مستقیم انجام داد.
-                      - declined             # قراداد توسط کاربر رد شده است.
-                      - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
-                    example: "new"
+                      - new
+                      - active
+                      - declined
+                      - cancelled
+                    example: new
+                    description: |
+                      وضعیت قرار داد کاربر، مقدیر مجاز برابر است با:
+                      - new: قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد
+                      - active: قراداد فعال است و می‌توان پرداخت‌مستقیم انجام داد
+                      - declined: قراداد توسط کاربر رد شده است
+                      - cancelled: قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد
                   expiration_time:
                     type: string
-                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
                     example: 2024-06-25T09:28:34.668933Z
-                  limit_amount:
+                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                  amount_limit:
                     type: integer
-                    description: ماکزیمم مبلغ در هر دوره
                     example: 100000
+                    description: ماکزیمم مبلغ در هر دوره
                   limit_remaining_amount:
                     type: integer
-                    description: مبلغ باقی‌مانده مجاز در دوره جاری
                     example: 98730
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
                   limit_expiration_time:
                     type: string
+                    example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
-                    example: 2024-03-20T00:00:00Z
 ```
 
-مثال:
+cURL Example:
 
-```bash
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=9bb790a3-44fd-486f-8ce8-38aa02cab069' \
---header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' 
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+--header 'Authorization: Token {merchant_token}' 
+```
 
-{"state":"active","expiration_time":"2024-06-25T09:28:34.668933Z","amount_limit":100000,"limit_remaining_amount":98730,"limit_expiration_time":"2024-03-20T00:00:00Z"}
+Success Response Example:
+```json
+{
+    "state": "declined",
+    "expiration_time": "2024-07-02T06:43:44.843212Z",
+    "amount_limit": 100000,
+    "limit_remaining_amount": 100000,
+    "limit_expiration_time": "2025-07-02T06:43:44.843212Z"
+}
+```
+
+#### Trace Contract (Post Method):
+
+```yaml
+servers:
+  - url: https://pardakht.cafebazaar.ir
+paths:
+  /pardakht/badje/v1/direct-pay/contract/trace/:
+    post:
+      summary: trace-contract
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Token {merchant_token}
+          description: توکن احراز هویت مرچنت
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_token:
+                  required: true
+                  type: string
+                  example: 7f9bf78c-a5e2-4126-9482-37484b3706be
+                  description: توکن قرارداد گرفته شده از اندپوینت Init Contract
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  state:
+                    type: string
+                    enum:
+                      - new
+                      - active
+                      - declined
+                      - cancelled
+                    example: new
+                    description: |
+                      وضعیت قرار داد کاربر، مقدیر مجاز برابر است با:
+                      - new: قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد
+                      - active: قراداد فعال است و می‌توان پرداخت‌مستقیم انجام داد
+                      - declined: قراداد توسط کاربر رد شده است
+                      - cancelled: قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد
+                  expiration_time:
+                    type: string
+                    example: 2024-06-25T09:28:34.668933Z
+                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                  amount_limit:
+                    type: integer
+                    example: 100000
+                    description: ماکزیمم مبلغ در هر دوره
+                  limit_remaining_amount:
+                    type: integer
+                    example: 98730
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
+                  limit_expiration_time:
+                    type: string
+                    example: 2024-06-25T09:28:34.668933Z
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+```
+
+cURL Example:
+
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace' \
+--header 'Authorization: Token {merchant_token}' \
+--data '{
+    "contract_token": "7f9bf78c-a5e2-4126-9482-3748ss3706be"
+}'
+```
+
+Success Response Example:
+```json
+{
+    "state": "declined",
+    "expiration_time": "2024-07-02T06:43:44.843212Z",
+    "amount_limit": 100000,
+    "limit_remaining_amount": 100000,
+    "limit_expiration_time": "2025-07-02T06:43:44.843212Z"
+}
 ```
 
 #### Direct Pay:
