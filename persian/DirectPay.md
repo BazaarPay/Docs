@@ -121,7 +121,7 @@ Success Response Example:
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: BazaarPay Web
   version: 1.0.0
 servers:
   - url: 'https://cafebazaar.ir'
