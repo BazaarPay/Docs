@@ -215,6 +215,10 @@ interface CallbackUrl {
 #### Trace Contract:
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
 servers:
   - url: https://pardakht.cafebazaar.ir
 paths:
@@ -222,19 +226,12 @@ paths:
     get:
       summary: trace-contract
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          schema:
-            type: string
-            example: Token {merchant_token}
-          description: توکن احراز هویت مرچنت
         - name: contract_token
           in: query
           required: true
           schema:
             type: string
-            example: af72319b-9baf-4c2b-9dbf-76cf119a4582          
+            example: af72319b-9baf-4c2b-9dbf-76cf119a4582
           description: توکن قرارداد گرفته شده از اندپوینت Init Contract
       responses:
         '200':
@@ -274,6 +271,13 @@ paths:
                     type: string
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: Authorization
+    scheme: Token
+    description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
