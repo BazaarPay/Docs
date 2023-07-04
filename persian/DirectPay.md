@@ -192,7 +192,7 @@ CallbackUrl:
       type: string
     method:
       type: string
-      enum: [post, get]
+      enum: [ post, get ]
     data:
       type: object
       additionalProperties:
