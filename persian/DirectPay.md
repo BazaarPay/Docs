@@ -101,31 +101,40 @@ Success Response Example:
 
 ```yaml
 servers:
-  - url: https://cafebazaar.ir/bazaar-pay/
-
+  - url: https://cafebazaar.ir
 paths:
-  { servers/url }/contract/direct-pay
-    get:
+  /bazaar-pay/contract/direct-pay:
+    post:
       summary: finalize-contract-without-sdk
       parameters:
-        - name: token
-          in: query
-          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+        - name: Authorization
+          in: header
+          required: true
           schema:
             type: string
-            example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+            example: Bearer { user_token }
+          description: توکن احراز هویت کاربر
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+            example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
+          description: توکن قرارداد گرفته شده از اندپوینت Init Contract
         - name: redirect_url
           in: query
-          description: user will be redirected to this address after the process
+          required: true
+          description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
           schema:
             type: string
             example: "https://example.com/bazaar-pay-return/direct-pay-contract"
         - name: phone_number
           in: query
-          description: phone number suggested to user for login in bazaar-pay / شماره موبایلی که پس از ریدایرکت به صفحه‌ی بازارپی برای لاگین به کاربر پیشنهاد می‌شود.
+          required: false
           schema:
             type: string
             example: "09999999999"
+          description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
 ```
 
 #### Open Finalize Contract flow:
@@ -137,12 +146,12 @@ import {startFinalizeContractProccess} from 'bazaar-payment-sdk';
 
 startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
     .then(() => {
-        // user will be redirected to provided callBackUrl.
+        // The user will be redirected to the provided callBackUrl.
     });
 ```
 
-با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرایند
-نهایی‌سازی کلاینت به `callBackUrl` ریدایرکت می‌شود.
+با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
+نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
 پس از ریدایرکت کاربر می‌توانید با استفاده از ای‌پی‌آی `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
 
 ###### startFinalizeContractProcess Arguments:
@@ -151,13 +160,31 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
 arguments:
   - name: contractToken
     type: string
-  - name: callbackUrl
-    type: CallBackUrl
+  - name: callBackUrl
+    type: CallbackUrl
   - name: phoneNumber
     type: string
 ```
 
-CallbackUrl type:
+CallbackUrl Type:
+
+```yaml
+CallbackUrl:
+  type: object
+  properties:
+    url:
+      type: string
+    method:
+      type: string
+      enum: [post, get]
+    data:
+      type: object
+      additionalProperties:
+        type: string
+  required:
+    - method
+    - data
+```
 
 ```typescript
 interface CallbackUrl {
@@ -169,7 +196,7 @@ interface CallbackUrl {
 }
 ```
 
-#### Trace contract:
+#### Trace Contract (Get Method):
 
 ```yaml
 paths:
