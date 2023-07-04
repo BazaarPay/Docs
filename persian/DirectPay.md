@@ -10,71 +10,86 @@
 به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
 
 ```yaml
-server:
-  - url: https://pardakht.cafebazaar.ir
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://pardakht.cafebazaar.ir'
 paths:
-  /pardakht/badje/v1/direct-pay/contract/init/:
+  /pardakht/badje/v1/direct-pay/contract/init:
     post:
-      summary: initiate-contract
       parameters:
-        - name: Authorization
-          in: header
+        - name: lang
+          in: query
           required: true
           schema:
             type: string
-            example: Token { merchant_token }
-          description: توکن احراز هویت مرچنت
       requestBody:
         content:
           application/json:
             schema:
-              type:
-                required: true
-                type: string
-                enum:  
-                 - direct_debit
-                 - wallet
-                example: wallet
-                description: |
-                  - direct_debit: دایرکت دبیت (پرداخت مستقیم)
-                  - wallet: کیف پول
-              period:
-                required: true
-                type: string
-                enum: 
-                  - weekly
-                  - monthly
-                  - yearly
-                example: "monthly"
-                description: |
-                  دوره‌ی زمانی از ابتدا ماه، هفته و یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود، مقادیر مجاز شامل:
-                  - weekly: هفتگی، هر شنبه این مقدار ریست می‌شود
-                  - monthly: ماهانه، اول ماه این مقدار ریست می‌شود
-                  - yearly: سالانه، اول سال ریست می‌شود
-              amount_limit:
-                required: true
-                type: int
-                min_value: 100000
-                max_value: 1000000000
-                example: 1000000
+              type: object
+              properties:
+                type:
+                  required: true
+                  type: string
+                  enum:
+                    - direct_debit
+                    - wallet
+                  example: "wallet"
+                  description: |
+                    - direct_debit: دایرکت دبیت (پرداخت مستقیم)
+                    - wallet: کیف پول
+                amount_limit:
+                  required: true
+                  type: int
+                  min_value: 100000
+                  max_value: 1000000000
+                  example: 1000000
+                period:
+                  required: true
+                  type: string
+                  enum:
+                    - weekly
+                    - monthly
+                    - yearly
+                  example: "yearly"
+                  description: |
+                    دوره‌ی زمانی از ابتدا ماه، هفته و یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود، مقادیر مجاز شامل:
+                      - weekly: هفتگی، در صورتی که قرارداد اعتبار داشته باشد، مقدار قابل مصرف از اول هفته (شنبه) ریست می‌شود
+                      - monthly: ماهانه، در صورتی که قرارداد اعتبار داشته باشد، مقدار قابل مصرف از اول ماه ریست می‌شود
+                      - yearly: سالانه، در صورتی که قرارداد اعتبار داشته باشد، مقدار قابل مصرف از اول سال ریست می‌شود
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                contract_token:
-                  type: string
-                  example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
+                type: object
+                properties:
+                  contract_token:
+                    type: string
+                    example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                details:
-                  type: string
-                  example: توکن هدر نامعتبر است.
-
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: 'توکن هدر نامعتبر است.'
+      security:
+        - TokenAuth: []
+components:
+  securitySchemes:
+    TokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Token
+      description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
