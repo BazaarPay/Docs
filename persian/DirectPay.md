@@ -31,8 +31,13 @@ paths:
               type:
                 required: true
                 type: string
-                enum: [ direct_debit, wallet ]
-                example: "wallet"
+                enum:  
+                 - direct_debit
+                 - wallet
+                example: wallet
+                description: |
+                  - direct_debit: دایرکت دبیت (پرداخت مستقیم)
+                  - wallet: کیف پول
               period:
                 required: true
                 type: string
