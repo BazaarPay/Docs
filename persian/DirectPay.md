@@ -269,7 +269,8 @@ paths:
                   expiration_time:
                     type: string
                     example: 2024-06-25T09:28:34.668933Z
-                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
+                    format: iso-8601
+                    description: تاریخ و زمان منقضی شدن قرارداد
                   amount_limit:
                     type: integer
                     example: 100000
@@ -280,8 +281,9 @@ paths:
                     description: مبلغ باقی‌مانده مجاز در دوره جاری
                   limit_expiration_time:
                     type: string
+                    format: iso-8601
                     example: 2024-06-25T09:28:34.668933Z
-                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
 components:
   securitySchemes:
     ApiKeyAuth:
