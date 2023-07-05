@@ -44,9 +44,9 @@ paths:
                     - wallet: کیف پول
                 amount_limit:
                   required: true
-                  type: int
-                  min_value: 100000
-                  max_value: 1000000000
+                  type: integer
+                  minimum: 100000
+                  maximum: 1000000000
                   example: 1000000
                 period:
                   required: true
@@ -82,13 +82,14 @@ paths:
                   detail:
                     type: string
                     example: 'توکن هدر نامعتبر است.'
-securitySchemes:
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: Authorization
-    scheme: Token
-    description: توکن احراز هویت مرچنت
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
@@ -158,6 +159,9 @@ paths:
             type: string
             example: این یک پیام تست است
           description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
+      responses:
+        '204':
+          description: بعد از موفق شدن تایید/رد فرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
 ```
 
 #### Open Finalize Contract flow:
@@ -175,7 +179,7 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
 
 با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
 نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
-پس از ریدایرکت کاربر می‌توانید با استفاده از ای‌پی‌آی `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
+پس از ریدایرکت کاربر می‌توانید با استفاده از اندپوینت `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
 
 ###### startFinalizeContractProcess Arguments:
 
@@ -278,13 +282,14 @@ paths:
                     type: string
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
-securitySchemes:
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: Authorization
-    scheme: Token
-    description: توکن احراز هویت مرچنت
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
@@ -343,13 +348,14 @@ paths:
       responses:
         '204':
           description: Success
-securitySchemes:
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: Authorization
-    scheme: Token
-    description: توکن احراز هویت مرچنت
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
 cURL Example:
@@ -366,4 +372,5 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lan
 در صورت موفقیت، یک Body خالی را برمی‌گرداند.
 نسبت به توکن چک‌اوت، idempotent است.
 تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
-اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش اتمیک فراخوانی گردد.
+اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
+اتمیک فراخوانی گردد.
