@@ -5,56 +5,111 @@
 
 #### Initiate contract:
 
-برای ساخت قرارداد دایرکت پی  پذیرنده (merchant) باید محدودیت حدکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند
+برای ساخت قرارداد دایرکت پی پذیرنده (merchant) باید محدودیت حداکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند.
 
-به طور مثل اگر پذیرنده قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کن. بعد از امضای این قرارداد توسط کاربر پذیرنده حداکثر هفته ای ۱ میلیون تومان میتواند پرداخت مستقیم از حساب کاربر انجام دهد.
+به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد
+توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://pardakht.cafebazaar.ir'
 paths:
-  { base_url }/direct-pay/contract/init/
+  /pardakht/badje/v1/direct-pay/contract/init:
     post:
-      summary: initiate-contract
+      parameters:
+        - name: lang
+          in: query
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              type:
-                type: string
-                enum: [ direct_debit, wallet ]
-                example: "wallet"
-              period:
-                type: string
-                enum: [ weekly, monthly, yearly ]
-                example: "monthly"          
-                description: دوره‌ی زمانی از ابتدا ماه، هفته ویا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود.
-              amount_limit:
-                type: int
-                min_value: 100000
-                max_value: 1000000000
-                example: 1000000
+              type: object
+              properties:
+                type:
+                  required: true
+                  type: string
+                  enum:
+                    - direct_debit
+                    - wallet
+                  example: "wallet"
+                  description: |
+                    - direct_debit: دایرکت دبیت (پرداخت مستقیم)
+                    - wallet: کیف پول
+                amount_limit:
+                  required: true
+                  type: integer
+                  minimum: 100000
+                  maximum: 1000000000
+                  example: 1000000
+                period:
+                  required: true
+                  type: string
+                  enum:
+                    - weekly
+                    - monthly
+                    - yearly
+                  example: "yearly"
+                  description: |
+                    دوره‌ی زمانی از ابتدا هفته، ماه یا سال شروع می‌شود. به این معنی که اگر قرارداد کاربر ۱۳ خرداد ماه امضا شود، دوره‌ی زمانی آن تا یکم تیر ماه است و از یکم تیر ماه محدودیت میزان تراکنش ریست می‌شود، مقادیر مجاز شامل:
+                      - weekly: هفتگی، در صورتی که قرارداد اعتبار داشته باشد، محدودیت میزان تراکنش از اول هفته (شنبه) ریست می‌شود
+                      - monthly: ماهانه، در صورتی که قرارداد اعتبار داشته باشد، محدودیت میزان تراکنش از اول ماه ریست می‌شود
+                      - yearly: سالانه، در صورتی که قرارداد اعتبار داشته باشد، محدودیت میزان تراکنش از اول سال ریست می‌شود
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
-                contract_token:
-                  type: string
-                  example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+                type: object
+                properties:
+                  contract_token:
+                    type: string
+                    example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: 'توکن هدر نامعتبر است.'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
-example:
+cURL Example:
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init' \
---header 'Content-Type: application/json' \
---header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' \
+--header 'Authorization: Token {merchant_token}' \
 --data-raw '{
     "type": "wallet"
     "period": "monthly"
     "amount_limit": 1000000
 }'
+```
 
-{"contract_token":"9bb790a3-44fd-486f-8ce8-38aa02cab069"}
+Success Response Example:
+
+```json
+{
+	"contract_token": "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+}
 ```
 
 #### Finalize Contract Without SDK:
@@ -65,32 +120,45 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ریدایرکت می‌شود.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay Web
+  version: 1.0.0
 servers:
-  - url: https://cafebazaar.ir/bazaar-pay/
-
+  - url: 'https://cafebazaar.ir'
 paths:
-  { servers/url }/contract/direct-pay
-    get:
+  /bazaar-pay/contract/direct-pay:
       summary: finalize-contract-without-sdk
+      description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
       parameters:
-        - name: token
+        - name: contract_token
           in: query
-          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+          required: true
           schema:
             type: string
-            example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
+            example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
+          description: توکن قرارداد گرفته شده از اندپوینت Init Contract
         - name: redirect_url
           in: query
-          description: user will be redirected to this address after the process
+          required: true
+          description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
           schema:
             type: string
-            example: "https://example.com/bazaar-pay-return/direct-pay-contract"
+            example: https://example.com/bazaar-pay-return/direct-pay-contract
         - name: phone_number
           in: query
-          description: phone number suggested to user for login in bazaar-pay / شماره موبایلی که پس از ریدایرکت به صفحه‌ی بازارپی برای لاگین به کاربر پیشنهاد می‌شود.
+          required: false
           schema:
             type: string
-            example: "09999999999"
+            example: 09999999999
+          description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
+        - name: message
+          in: query
+          required: false
+          schema:
+            type: string
+            example: این یک پیام تست است
+          description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
 #### Open Finalize Contract flow:
@@ -102,13 +170,13 @@ import {startFinalizeContractProccess} from 'bazaar-payment-sdk';
 
 startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
     .then(() => {
-        // user will be redirected to provided callBackUrl.
+        // The user will be redirected to the provided callBackUrl.
     });
 ```
 
-با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرایند
-نهایی‌سازی کلاینت به `callBackUrl` ریدایرکت می‌شود.
-پس از ریدایرکت کاربر می‌توانید با استفاده از ای‌پی‌آی `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
+با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
+نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
+پس از ریدایرکت کاربر می‌توانید با استفاده از اندپوینت `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
 
 ###### startFinalizeContractProcess Arguments:
 
@@ -116,13 +184,31 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
 arguments:
   - name: contractToken
     type: string
-  - name: callbackUrl
-    type: CallBackUrl
+  - name: callBackUrl
+    type: CallbackUrl
   - name: phoneNumber
     type: string
 ```
 
-CallbackUrl type:
+CallbackUrl Type:
+
+```yaml
+CallbackUrl:
+  type: object
+  properties:
+    url:
+      type: string
+    method:
+      type: string
+      enum: [ post, get ]
+    data:
+      type: object
+      additionalProperties:
+        type: string
+  required:
+    - method
+    - data
+```
 
 ```typescript
 interface CallbackUrl {
@@ -134,24 +220,30 @@ interface CallbackUrl {
 }
 ```
 
-#### Trace contract:
+#### Trace Contract:
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: https://pardakht.cafebazaar.ir
 paths:
-  { base_url }/direct-pay/contract/trace/
+  /pardakht/badje/v1/direct-pay/contract/trace/:
     get:
       summary: trace-contract
       parameters:
-        - in: query
-          name: contract_token
+        - name: contract_token
+          in: query
+          required: true
           schema:
             type: string
-          required: true
-          example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
-          description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
+            example: af72319b-9baf-4c2b-9dbf-76cf119a4582
+          description: توکن قرارداد گرفته شده از اندپوینت Init Contract
       responses:
         '200':
-          description: OK
+          description: Success
           content:
             application/json:
               schema:
@@ -160,78 +252,124 @@ paths:
                   state:
                     type: string
                     enum:
-                      - new                  # قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد.
-                      - active               # راداد فعال است و می‌توان پرداخت‌مستقیم انجام داد.
-                      - declined             # قراداد توسط کاربر رد شده است.
-                      - cancelled            # قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد.
-                    example: "new"
+                      - new
+                      - active
+                      - declined
+                      - cancelled
+                    example: new
+                    description: |
+                      وضعیت قرار داد کاربر، مقدیر مجاز برابر است با:
+                      - new: قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد
+                      - active: قراداد فعال است و می‌توان پرداخت‌مستقیم انجام داد
+                      - declined: قراداد توسط کاربر رد شده است
+                      - cancelled: قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد
                   expiration_time:
                     type: string
-                    description: تاریخ و زمان منقضی شدن قرارداد در فرمت ISO
                     example: 2024-06-25T09:28:34.668933Z
-                  limit_amount:
+                    format: iso-8601
+                    description: تاریخ و زمان منقضی شدن قرارداد
+                  amount_limit:
                     type: integer
-                    description: ماکزیمم مبلغ در هر دوره
                     example: 100000
+                    description: ماکزیمم مبلغ در هر دوره
                   limit_remaining_amount:
                     type: integer
-                    description: مبلغ باقی‌مانده مجاز در دوره جاری
                     example: 98730
+                    description: مبلغ باقی‌مانده مجاز در دوره جاری
                   limit_expiration_time:
                     type: string
-                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت مبلغ) ISO
-                    example: 2024-03-20T00:00:00Z
+                    format: iso-8601
+                    example: 2024-06-25T09:28:34.668933Z
+                    description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
-مثال:
+cURL Example:
 
-```bash
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=9bb790a3-44fd-486f-8ce8-38aa02cab069' \
---header 'Content-Type: application/json' \--header 'Authorization: Token cxvndf40824nfpw98he899jb440f66bt6ac8c30a' 
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+--header 'Authorization: Token {merchant_token}' 
+```
 
-{"state":"active","expiration_time":"2024-06-25T09:28:34.668933Z","amount_limit":100000,"limit_remaining_amount":98730,"limit_expiration_time":"2024-03-20T00:00:00Z"}
+Success Response Example:
+
+```json
+{
+	"state": "declined",
+	"expiration_time": "2024-07-02T06:43:44.843212Z",
+	"amount_limit": 100000,
+	"limit_remaining_amount": 100000,
+	"limit_expiration_time": "2025-07-02T06:43:44.843212Z"
+}
 ```
 
 #### Direct Pay:
 
-نیاز است که قبل از فراخوانی این ای‌پی‌آی، قرارداد رضایت کاربر تایید شده باشد. قبل از صدا زدن این ای‌پی‌آی باید توسط
-ای‌پی‌آی init checkout یه توکن چک‌اوت ساخته شده باشد. از این توکن مانند فرآیند عادی پرداخت برای Trace و Refund می‌توان
+نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
+اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در
+اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: https://pardakht.cafebazaar.ir
 paths:
-  { base_url }/direct-pay/
+  /direct-pay/:
     post:
-      summary: trace-contract
+      summary: pay-with-contract
       requestBody:
         content:
           application/json:
             schema:
-              contract_token:
-                type: string
-                example: "9bb790a3-44fd-486f-8ce8-38aa02cab069"
-                description: contract_token received from init-contract / توکن قرارداد گرفته شده از ای‌پی‌آی Init Contract
-              checkout_token:
-                type: string
-                example: "0123456789"
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+              type: object
+              properties:
+                contract_token:
+                  type: string
+                  required: true
+                  example: 9bb790a3-44fd-486f-8ce8-38aa0scab069
+                  description: توکن قرارداد گرفته شده از اندپوینت Init Contract
+                checkout_token:
+                  type: string
+                  required: true
+                  example: "0123456789"
+                  description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
       responses:
         '204':
-          description: payment made successfully
+          description: Success
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      scheme: Token
+      description: توکن احراز هویت مرچنت
 ```
 
-مثال:
+cURL Example:
 
-```bash
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
-  --header 'Content-Type: application/json' \
-  --data-raw '{
-    "contract_token": "9bb790a3-44fd-486f-8ce8-38aa02cab069",
-    "checkout_token": "0123456789"
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
+--header 'Authorization: Token {merchant_token}' \
+--data '{
+    "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
+    "checkout_token": "1443280167"
 }'
 ```
 
 در صورت موفقیت، یک Body خالی را برمی‌گرداند.
 نسبت به توکن چک‌اوت، idempotent است.
-تفاوت این روش با پرداخت عادی که از طریق sdk توسط کاربر انجام می‌شود این است که نیازی به فراخوانی ای‌پی‌آی commit نیست و
-اتوماتیک کامیت می‌شود. بنابراین بهتر است این ای‌پی‌آی بعد از ارائه‌ی محصول به کاربر و در یک تراکنش اتمیک فراخوانی گردد.
+تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
+اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
+اتمیک فراخوانی گردد.
