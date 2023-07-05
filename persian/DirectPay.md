@@ -151,6 +151,13 @@ paths:
             type: string
             example: 09999999999
           description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
+        - name: message
+          in: query
+          required: false
+          schema:
+            type: string
+            example: این یک پیام تست است
+          description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
 #### Open Finalize Contract flow:
