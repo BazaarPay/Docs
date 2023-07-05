@@ -128,8 +128,8 @@ servers:
   - url: 'https://cafebazaar.ir'
 paths:
   /bazaar-pay/contract/direct-pay:
-    post:
       summary: finalize-contract-without-sdk
+      description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
       parameters:
         - name: contract_token
           in: query
@@ -159,9 +159,6 @@ paths:
             type: string
             example: این یک پیام تست است
           description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
-      responses:
-        '204':
-          description: بعد از موفق شدن تایید/رد فرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
 ```
 
 #### Open Finalize Contract flow:
