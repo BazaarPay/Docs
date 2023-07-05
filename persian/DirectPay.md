@@ -130,7 +130,7 @@ paths:
     post:
       summary: finalize-contract-without-sdk
       parameters:
-        - name: token
+        - name: contract_token
           in: query
           required: true
           schema:
