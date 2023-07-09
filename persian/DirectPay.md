@@ -20,12 +20,6 @@ servers:
 paths:
   /pardakht/badje/v1/direct-pay/contract/init:
     post:
-      parameters:
-        - name: lang
-          in: query
-          required: true
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
