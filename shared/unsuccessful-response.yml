@@ -22,3 +22,16 @@ responses:
                 type: array
                 items:
                   type: string
+        examples:
+          fieldIsNull:
+            value:
+              detail:
+                type: [
+                  "این فیلد نمی‌تواند خالی باشد."
+                ]
+          fieldIsInvalid:
+            value:
+              detail:
+                type: [
+                  "\"test\" یک انتخاب معتبر نیست."
+                ]
