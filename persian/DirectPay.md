@@ -70,6 +70,8 @@ paths:
           $ref: './shared/unsuccessful-response.yml#/responses/401'
         '400':
           $ref: './shared/unsuccessful-response.yml#/responses/400'
+        '503':
+          $ref: './shared/unsuccessful-response.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -269,6 +271,8 @@ paths:
           $ref: './shared/unsuccessful-response.yml#/responses/401'
         '400':
           $ref: './shared/unsuccessful-response.yml#/responses/400'
+        '503':
+          $ref: './shared/unsuccessful-response.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -335,6 +339,8 @@ paths:
           $ref: './shared/unsuccessful-response.yml#/responses/401'
         '400':
           $ref: './shared/unsuccessful-response.yml#/responses/400'
+        '503':
+          $ref: './shared/unsuccessful-response.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
