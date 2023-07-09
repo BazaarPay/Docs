@@ -1,0 +1,11 @@
+responses:
+  '401':
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            detail:
+              type: string
+              example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
