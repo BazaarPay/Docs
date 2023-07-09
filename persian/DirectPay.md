@@ -67,15 +67,7 @@ paths:
                     type: string
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  detail:
-                    type: string
-                    example: 'توکن هدر نامعتبر است.'
+          $ref: './shared/unsuccessful-response.yml#/responses/401'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -275,6 +267,8 @@ paths:
                     format: iso-8601
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
+        '401':
+          $ref: './shared/unsuccessful-response.yml#/responses/401'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -341,6 +335,8 @@ paths:
       responses:
         '204':
           description: Success
+        '401':
+          $ref: './shared/unsuccessful-response.yml#/responses/401'
 components:
   securitySchemes:
     ApiKeyAuth:
