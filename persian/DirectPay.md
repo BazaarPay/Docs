@@ -114,37 +114,37 @@ servers:
   - url: 'https://cafebazaar.ir'
 paths:
   /bazaar-pay/contract/direct-pay:
-      summary: finalize-contract-without-sdk
-      description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
-      parameters:
-        - name: contract_token
-          in: query
-          required: true
-          schema:
-            type: string
-            example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
-          description: توکن قرارداد گرفته شده از اندپوینت Init Contract
-        - name: redirect_url
-          in: query
-          required: true
-          description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
-          schema:
-            type: string
-            example: https://example.com/bazaar-pay-return/direct-pay-contract
-        - name: phone_number
-          in: query
-          required: false
-          schema:
-            type: string
-            example: 09999999999
-          description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
-        - name: message
-          in: query
-          required: false
-          schema:
-            type: string
-            example: این یک پیام تست است
-          description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
+    summary: finalize-contract-without-sdk
+    description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
+    parameters:
+      - name: contract_token
+        in: query
+        required: true
+        schema:
+          type: string
+          example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
+        description: توکن قرارداد گرفته شده از اندپوینت Init Contract
+      - name: redirect_url
+        in: query
+        required: true
+        description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
+        schema:
+          type: string
+          example: https://example.com/bazaar-pay-return/direct-pay-contract
+      - name: phone_number
+        in: query
+        required: false
+        schema:
+          type: string
+          example: 09999999999
+        description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
+      - name: message
+        in: query
+        required: false
+        schema:
+          type: string
+          example: این یک پیام تست است
+        description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
 #### Open Finalize Contract flow:
@@ -160,9 +160,12 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
     });
 ```
 
-با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
-نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
-پس از ریدایرکت کاربر می‌توانید با استفاده از اندپوینت `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
+* با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
+  نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
+* پس از ریدایرکت کاربر می‌توانید با استفاده از اندپوینت `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
+* امکان رد/تایید قراردادی که از قبل رد/تایید شده باشد مجددا وجود ندارد و در صورتی که کاربر اقدام به این عمل کند ارور
+  مناسب
+  آن مانند `این قرارداد قبلا فعال شده‌است و امکان تغییر وضعیت وجود ندارد.` نمایش داده می‌شود.
 
 ###### startFinalizeContractProcess Arguments:
 
@@ -358,8 +361,9 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lan
 }'
 ```
 
-در صورت موفقیت، یک Body خالی را برمی‌گرداند.
-نسبت به توکن چک‌اوت، idempotent است.
-تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
-اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
-اتمیک فراخوانی گردد.
+* در صورت موفقیت، یک رسپانس خالی را برمی‌گرداند.
+* نسبت به توکن چک‌اوت، idempotent است.
+* تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
+  اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
+  اتمیک فراخوانی گردد.
+
