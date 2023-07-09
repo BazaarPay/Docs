@@ -9,3 +9,16 @@ responses:
             detail:
               type: string
               example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
+  '400':
+    description: Bad Request
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            detail:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: string
