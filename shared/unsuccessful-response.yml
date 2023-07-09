@@ -1,6 +1,6 @@
 responses:
   '401':
-    description: Unauthorized
+    description: Unauthorized. This response is returned when the request token is invalid or null.
     content:
       application/json:
         schema:
@@ -10,7 +10,7 @@ responses:
               type: string
               example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
   '400':
-    description: Bad Request
+    description: Bad Request. This response is returned when the request is invalid, such as when a required property is null or invalid.
     content:
       application/json:
         schema:
