@@ -10,7 +10,7 @@ responses:
               type: string
               example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
   '400':
-    description: Bad Request. This response is returned when the request is invalid, such as when a required property is null or invalid.
+    description: Bad Request. This response is returned when the request is invalid, such as when a required property is null, has an invalid value, or the request contains invalid JSON.
     content:
       application/json:
         schema:
@@ -35,3 +35,18 @@ responses:
                 type: [
                   "\"test\" یک انتخاب معتبر نیست."
                 ]
+          fieldIsMoreThanMaximum:
+            value:
+              detail:
+                type: [
+                  "این مقدار باید کوچکتر یا مساوی با 1000000000 باشد."
+                ]
+          fieldIsLessThanMinimum:
+            value:
+              detail:
+                type: [
+                  "این مقدار باید بزرگتر یا مساوی با 100000 باشد."
+                ]
+          invalidJson:
+            value:
+              detail: "JSON parse error - Expecting ',' delimiter: line 4 column 23 (char 71)"
