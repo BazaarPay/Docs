@@ -71,11 +71,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      scheme: Token
-      description: توکن احراز هویت مرچنت
+      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
@@ -272,11 +268,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      scheme: Token
-      description: توکن احراز هویت مرچنت
+      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
@@ -340,11 +332,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      scheme: Token
-      description: توکن احراز هویت مرچنت
+      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
