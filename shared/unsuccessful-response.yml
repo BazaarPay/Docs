@@ -50,3 +50,17 @@ responses:
           invalidJson:
             value:
               detail: "JSON parse error - Expecting ',' delimiter: line 4 column 23 (char 71)"
+  '503':
+    description: Service Temporarily Unavailable. This response is returned when the server is currently unable to handle the request due to temporary overloading or maintenance.
+    content:
+      text/html:
+        schema:
+          type: string
+          example: |
+            <html>
+            <head><title>503 Service Temporarily Unavailable</title></head>
+            <body>
+            <center><h1>503 Service Temporarily Unavailable</h1></center>
+            <hr><center>nginx</center>
+            </body>
+            </html>
