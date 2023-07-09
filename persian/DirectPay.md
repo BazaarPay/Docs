@@ -68,6 +68,8 @@ paths:
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
           $ref: './shared/unsuccessful-response.yml#/responses/401'
+        '400':
+          $ref: './shared/unsuccessful-response.yml#/responses/400'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -265,6 +267,8 @@ paths:
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
         '401':
           $ref: './shared/unsuccessful-response.yml#/responses/401'
+        '400':
+          $ref: './shared/unsuccessful-response.yml#/responses/400'
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -329,6 +333,8 @@ paths:
           description: Success
         '401':
           $ref: './shared/unsuccessful-response.yml#/responses/401'
+        '400':
+          $ref: './shared/unsuccessful-response.yml#/responses/400'
 components:
   securitySchemes:
     ApiKeyAuth:
