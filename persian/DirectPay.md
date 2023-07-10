@@ -341,7 +341,13 @@ paths:
         '401':
           $ref: './shared/unsuccessful-response.yml#/responses/401'
         '400':
-          $ref: './shared/unsuccessful-response.yml#/responses/400'
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: './shared/unsuccessful-response.yml#/responses/400/content/application/json/schema'
+                  - $ref: './shared/unsuccessful-response-pay-in-directpay.yml#/responses/400/content/application/json/schema'
         '503':
           $ref: './shared/unsuccessful-response.yml#/responses/503'
 components:
