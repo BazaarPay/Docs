@@ -68,6 +68,13 @@ responses:
                 detail:
                   type: string
                   example: "موجودی کافی در حساب بانکی خود ندارید"
+            directDebitIsNotActive:
+              type: object
+              description:  قرارداد دایرکت‌دبیت کاربر فعال نباشد (منقضی شده باشد یا کنسل شده باشد)
+              properties:
+                detail:
+                  type: string
+                  example: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
             generalDirectDebitErrors:
               type: object
               description:  سایر خطاهای سیستم دایرکت دبیت مانند نمونه در صورت وقوع به کاربر نمایش داده می‌شود
