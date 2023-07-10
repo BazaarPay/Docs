@@ -63,21 +63,21 @@ responses:
                   example: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
             directDebitBalanceIsNotEnough:
               type: object
-              description:  موجودی کافی در کارتی که با آن دایرکت‌دبیت را فعال کرده‌اید وجود نداشته باشد
+              description: موجودی کافی در کارتی که با آن دایرکت‌دبیت را فعال کرده‌اید وجود نداشته باشد
               properties:
                 detail:
                   type: string
                   example: "موجودی کافی در حساب بانکی خود ندارید"
             directDebitIsNotActive:
               type: object
-              description:  قرارداد دایرکت‌دبیت کاربر فعال نباشد (منقضی شده باشد یا کنسل شده باشد)
+              description: قرارداد دایرکت‌دبیت کاربر فعال نباشد (منقضی شده باشد یا کنسل شده باشد)
               properties:
                 detail:
                   type: string
                   example: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
             generalDirectDebitErrors:
               type: object
-              description:  سایر خطاهای سیستم دایرکت دبیت مانند نمونه در صورت وقوع به کاربر نمایش داده می‌شود
+              description: سایر خطاهای سیستم دایرکت دبیت مانند نمونه در صورت وقوع به کاربر نمایش داده می‌شود
               properties:
                 detail:
                   type: string
