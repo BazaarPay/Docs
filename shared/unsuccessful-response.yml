@@ -1,61 +1,54 @@
 responses:
   '401':
-    description: Unauthorized. This response is returned when the request token is invalid or null.
+    description: Unauthorized
     content:
       application/json:
         schema:
           type: object
+          description: هدر احراز هویت نامعتبر یا ارسال نشده باشد
           properties:
             detail:
               type: string
               example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
   '400':
-    description: Bad Request. This response is returned when the request is invalid, such as when a required property is null, has an invalid value, or the request contains invalid JSON.
+    description: Bad Request
     content:
       application/json:
         schema:
           type: object
           properties:
-            detail:
+            jsonObjectFieldIsNull:
               type: object
-              additionalProperties:
-                type: array
-                items:
+              description: یک فیلد ارسال نشود یا مقدار آن null ارسال شود
+              properties:
+                json_object_name:
+                  type: array
+                  items:
+                    type: string
+                    example: "این فیلد نمی‌تواند خالی باشد."
+            jsonObjectValueIsInvalid:
+              type: object
+              description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
+              properties:
+                json_object_name:
+                  type: array
+                  items:
+                    type: string
+                    example: "\"test\" یک انتخاب معتبر نیست."
+            requestJsonSchemaIsInvalid:
+              type: object
+              description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
+              properties:
+                detail:
                   type: string
-        examples:
-          fieldIsNull:
-            value:
-              detail:
-                type: [
-                  "این فیلد نمی‌تواند خالی باشد."
-                ]
-          fieldIsInvalid:
-            value:
-              detail:
-                type: [
-                  "\"test\" یک انتخاب معتبر نیست."
-                ]
-          fieldIsMoreThanMaximum:
-            value:
-              detail:
-                type: [
-                  "این مقدار باید کوچکتر یا مساوی با 1000000000 باشد."
-                ]
-          fieldIsLessThanMinimum:
-            value:
-              detail:
-                type: [
-                  "این مقدار باید بزرگتر یا مساوی با 100000 باشد."
-                ]
-          invalidJson:
-            value:
-              detail: "JSON parse error - Expecting ',' delimiter: line 4 column 23 (char 71)"
+                  example: "JSON parse error - Extra data: line 5 column 2 (char 76)"
   '503':
     description: Service Temporarily Unavailable. This response is returned when the server is currently unable to handle the request due to temporary overloading or maintenance.
     content:
       text/html:
         schema:
           type: string
+          description: سرویس از سمت سرور دچار اختلال باشد
           example: |
             <html>
             <head><title>503 Service Temporarily Unavailable</title></head>
