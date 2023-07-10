@@ -17,31 +17,30 @@ responses:
         schema:
           type: object
           properties:
-            jsonObjectFieldIsNull:
-              type: object
-              description: یک فیلد ارسال نشود یا مقدار آن null ارسال شود
-              properties:
-                json_object_name:
-                  type: array
+            json_object_name:
+              type: array
+              description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
+              items:
+                type: string
+            detail:
+              oneOf:
+                - type: array
                   items:
                     type: string
-                    example: "این فیلد نمی‌تواند خالی باشد."
-            jsonObjectValueIsInvalid:
-              type: object
-              description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
-              properties:
-                json_object_name:
-                  type: array
-                  items:
-                    type: string
-                    example: "\"test\" یک انتخاب معتبر نیست."
-            requestJsonSchemaIsInvalid:
-              type: object
-              description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
-              properties:
-                detail:
-                  type: string
-                  example: "JSON parse error - Extra data: line 5 column 2 (char 76)"
+                - type: string
+            examples:
+              NullInRequestData:
+                value:
+                  description: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
+                  json_object_name: [ "این فیلد نمی‌تواند خالی باشد." ]
+              invalidRequestSchema:
+                value:
+                  description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
+                  detail: "JSON parse error - Extra data: line 4 column 2 (char 57)"
+              invalidRequestData:
+                value:
+                  description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
+                  json_object_name: [ "\"test\" یک انتخاب معتبر نیست." ]
   '503':
     description: Service Temporarily Unavailable. This response is returned when the server is currently unable to handle the request due to temporary overloading or maintenance.
     content:

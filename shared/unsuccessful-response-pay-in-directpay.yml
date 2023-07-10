@@ -1,84 +1,65 @@
 responses:
   '400':
-    description: Bad Request. This response is returned when the request is invalid, such as when a required property is null, has an invalid value, or the request contains invalid JSON.
+    description: Bad Request
     content:
       application/json:
         schema:
           type: object
           properties:
-            amountLimitIsMoreThanMaximum:
-              type: object
-              description: در صورتی که مقدار فیلد amount از حداکثر مقدار مجاز آن بیشتر باشد
-              properties:
-                amount_limit:
-                  type: array
+            json_object_name:
+              type: array
+              description: فیلد دارای خطا همراه با نام فیلد، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگرداننده می‌شود
+              items:
+                type: string
+            detail:
+              oneOf:
+                - type: array
                   items:
                     type: string
-                    example: "این مقدار باید کوچکتر یا مساوی با 1000000000 باشد."
-            amountLimitIsLessThanMinimum:
-              type: object
-              description: در صورتی که مقدار فیلد amount از حداقل مقدار مجاز آن کمتر باشد
-              properties:
-                amount_limit:
-                  type: array
-                  items:
-                    type: string
-                    example: "این مقدار باید بزرگتر یا مساوی با 100000 باشد."
-            directpayIsNotActive:
-              type: object
-              description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
-              properties:
-                detail:
-                  type: array
-                  items:
-                    type: string
-                    example: "قرارداد کاربر فعال نیست."
-            walletBalanceIsNotEnough:
-              type: object
-              description: موجودی کیف پول کاربر کافی نباشد
-              properties:
-                detail:
-                  type: string
-                  example: "موجودی حساب کافی نیست."
-            checkoutTokenHasExpired:
-              type: object
-              description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
-              properties:
-                detail:
-                  type: string
-                  example: "Checkout is timed out"
-            directDebitPayAmountIsLessThanMinimum:
-              type: object
-              description: حداقل مجاز برای پرداخت با دایرکت دبیت که برابر با ۱۰۰۰ تومان است رعایت نشود
-              properties:
-                detail:
-                  type: string
-                  example: "حداقل مقدار تراکنش ۱۰۰۰ ریال است."
-            sumOfPayAmountForAContractIsMoreThanMaximum:
-              type: object
-              description: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
-              properties:
-                detail:
-                  type: string
-                  example: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
-            directDebitBalanceIsNotEnough:
-              type: object
-              description: موجودی کافی در کارتی که با آن دایرکت‌دبیت را فعال کرده‌اید وجود نداشته باشد
-              properties:
-                detail:
-                  type: string
-                  example: "موجودی کافی در حساب بانکی خود ندارید"
-            directDebitIsNotActive:
-              type: object
-              description: قرارداد دایرکت‌دبیت کاربر فعال نباشد (منقضی شده باشد یا کنسل شده باشد)
-              properties:
-                detail:
-                  type: string
-                  example: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
-            generalDirectDebitErrors:
-              type: object
-              description: سایر خطاهای سیستم دایرکت دبیت مانند نمونه در صورت وقوع به کاربر نمایش داده می‌شود
-              properties:
-                detail:
-                  type: string
-                  example: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
+                - type: string
+            amount_limit:
+              type: array
+              items:
+                type: string
+            examples:
+              directpayIsNotActive:
+                value:
+                  description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
+                  detail: [ "قرارداد کاربر فعال نیست." ]
+              sumOfPayAmountForAContractIsMoreThanMaximum:
+                value:
+                  description: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
+                  detail: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
+              walletBalanceIsNotEnough:
+                description: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
+                detail: "موجودی حساب کافی نیست."
+              directDebitBalanceIsNotEnough:
+                description: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
+                detail: "موجودی کافی در حساب بانکی خود ندارید"
+              directDebitPayAmountIsLessThanMinimum:
+                description: حداقل مجاز برای پرداخت با دایرکت دبیت که برابر با ۱۰۰۰ تومان است رعایت نشود
+                detail: "حداقل مقدار تراکنش ۱۰۰۰ ریال است."
+              directDebitIsNotActive:
+                description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر فعال نباشد، منقضی شده باشد، لغو شده باشد یا دایرکت دبیت به صورت موقت غیرفعال باشد
+                detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
+              checkoutTokenHasExpired:
+                description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
+                detail: "Checkout is timed out"
+              directDebitCardHasExpired:
+                description: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
+                detail: "کارت غیرفعال می‌باشد."
+              directDebitServiceIsDown:
+                description: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
+                detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
+              directDebitContractHasDisabledByUser:
+                description: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
+                detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
+              directDebitPayAmountIsMoreThanMaximumPerTransaction:
+                description: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+                detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
+              directDebitPayAmountIsMoreThanMaximumPerDay:
+                description: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+                detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+              directDebitPayTransactionCountIsMoreThanMaximumPerDay:
+                description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
+                detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
