@@ -67,15 +67,15 @@ paths:
                     type: string
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
-          $ref: './shared/unsuccessful-response.yml#/responses/401'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
         '400':
-          $ref: './shared/unsuccessful-response.yml#/responses/400'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400'
         '503':
-          $ref: './shared/unsuccessful-response.yml#/responses/503'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
@@ -271,15 +271,15 @@ paths:
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
         '401':
-          $ref: './shared/unsuccessful-response.yml#/responses/401'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
         '400':
-          $ref: './shared/unsuccessful-response.yml#/responses/400'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400'
         '503':
-          $ref: './shared/unsuccessful-response.yml#/responses/503'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
@@ -339,21 +339,21 @@ paths:
         '204':
           description: Success
         '401':
-          $ref: './shared/unsuccessful-response.yml#/responses/401'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: './shared/unsuccessful-response.yml#/responses/400/content/application/json/schema'
-                  - $ref: './shared/unsuccessful-response-pay-in-directpay.yml#/responses/400/content/application/json/schema'
+                  - $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400/content/application/json/schema'
+                  - $ref: './docs_fa/shared_components/directpay/pay-responses.yml#/responses/400/content/application/json/schema'
         '503':
-          $ref: './shared/unsuccessful-response.yml#/responses/503'
+          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './shared/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 cURL Example:
