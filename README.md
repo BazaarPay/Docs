@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./pictures/bazaar-pay-logo-english.png" alt="bazaar-pay"/>
+  <img src="IdeaProjects/Docs-new/assets/bazaar-pay-logo-english.png" alt="bazaar-pay"/>
 </p>
 
 Payment service technical documentation
@@ -10,8 +10,8 @@ BazaarPay provides merchants with multiple payment solutions, and SDKs for easy 
 - [Web SDK](https://www.npmjs.com/package/@cafebazaar/payment-sdk)
 - SDK-less payment
 
-We also provide [direct payment service](./persian/DirectPay.md) for easier payments and better user experience.
+We also provide [direct payment service](IdeaProjects/Docs-new/persian_docs/DirectPay.md) for easier payments and better user experience.
 
-Merchants can also [integrate BazaarPay wallet](./persian/Wallet.md) into their applications.
+Merchants can also [integrate BazaarPay wallet](IdeaProjects/Docs-new/persian_docs/Wallet.md) into their applications.
 
-- [Persian Documentation](./persian/README.md)
+- [Persian Documentation](IdeaProjects/Docs-new/persian_docs/README.md)
