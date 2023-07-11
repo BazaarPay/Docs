@@ -14,4 +14,4 @@ We also provide [direct payment service](./persian_docs/DirectPay.md) for easier
 
 Merchants can also [integrate BazaarPay wallet](./persian_docs/Wallet.md) into their applications.
 
-- [Persian Documentation](./persian_docs)
+- [Persian Documentation](./persian_docs/README.md)
