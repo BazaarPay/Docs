@@ -90,6 +90,6 @@ commit را صدا بزنید.
 ممکن است کاربر هنوز در حال پرداخت باشد. در این صورت لازم است دقایقی دیگر (حداکثر ۱۰ دقیقه) دوباره وضعیت پرداخت را
 استعلام کنید تا وضعیت نهایی مشخص شده باشد.
 
-- [Basic Payment Flow](./Payment.md)
-- [DirectPay](./DirectPay.md)
-- [Wallet Integration](./Wallet.md)
+- [Basic Payment Flow](./payment.md)
+- [DirectPay](./directpay.md)
+- [Wallet Integration](./wallet.md)

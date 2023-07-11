@@ -10,8 +10,8 @@ BazaarPay provides merchants with multiple payment solutions, and SDKs for easy 
 - [Web SDK](https://www.npmjs.com/package/@cafebazaar/payment-sdk)
 - SDK-Less Payment
 
-We also provide [direct payment service](./persian_docs/DirectPay.md) for easier payments and better user experience.
+We also provide [direct payment service](./persian_docs/directpay.md) for easier payments and better user experience.
 
-Merchants can also [integrate BazaarPay wallet](./persian_docs/Wallet.md) into their applications.
+Merchants can also [integrate BazaarPay wallet](./persian_docs/wallet.md) into their applications.
 
 - [Persian Documentation](./persian_docs/README.md)
