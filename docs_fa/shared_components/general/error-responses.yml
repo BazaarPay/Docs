@@ -29,15 +29,15 @@ responses:
                     type: string
                 - type: string
             examples:
-              NullInRequestData:
+              null_in_request_data:
                 value:
                   description: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
                   json_object_name: [ "این فیلد نمی‌تواند خالی باشد." ]
-              invalidRequestSchema:
+              invalid_request_schema:
                 value:
                   description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
                   detail: "JSON parse error - Extra data: line 4 column 2 (char 57)"
-              invalidRequestData:
+              invalid_request_data:
                 value:
                   description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
                   json_object_name: [ "\"test\" یک انتخاب معتبر نیست." ]
