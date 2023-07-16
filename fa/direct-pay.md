@@ -318,7 +318,7 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
 
-### نمونه OpenAPI
+### نمونه درخواست
 
 ```yaml
 openapi: 3.1.0
@@ -357,7 +357,7 @@ paths:
           content:
             application/json:
               schema:
-                anyOf:
+                oneOf: 
                   - $ref: './docs_fa/shared_components/error-responses.yml#/responses/400/content/application/json/schema'
                   - $ref: '#/components/schemas/PayResponse'
         '503':
@@ -368,7 +368,25 @@ components:
       $ref: './docs_fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه OpenAPI ارورهای پرداخت
+### نمونه cURL
+
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
+--header 'Authorization: Token {merchant_token}' \
+--data '{
+    "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
+    "checkout_token": "1443280167"
+}'
+```
+
+* در صورت موفقیت، یک رسپانس خالی را برمی‌گرداند.
+* نسبت به توکن چک‌اوت، idempotent است.
+* تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست
+  و
+  اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
+  اتمیک فراخوانی گردد.
+
+### نمونه ارورهای پرداخت
 
 ```yaml
 components:
@@ -376,22 +394,12 @@ components:
     PayResponse:
       type: object
       properties:
-        oneOf:
-          json_object_name:
-          type: array
-          description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
-          items:
-            type: string
         detail:
           oneOf:
             - type: array
               items:
                 type: string
             - type: string
-        amount_limit:
-          type: array
-          items:
-            type: string
         examples:
           directpay_is_not_active:
             value:
@@ -435,22 +443,3 @@ components:
             description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
             detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
 ```
-
-### نمونه cURL
-
-```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
---header 'Authorization: Token {merchant_token}' \
---data '{
-    "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
-    "checkout_token": "1443280167"
-}'
-```
-
-* در صورت موفقیت، یک رسپانس خالی را برمی‌گرداند.
-* نسبت به توکن چک‌اوت، idempotent است.
-* تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست
-  و
-  اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
-  اتمیک فراخوانی گردد.
-
