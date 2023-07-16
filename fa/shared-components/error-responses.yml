@@ -17,17 +17,19 @@ responses:
         schema:
           type: object
           properties:
-            json_object_name:
-              type: array
-              description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
-              items:
-                type: string
-            detail:
-              oneOf:
-                - type: array
+            oneOf:
+              anyOf:
+                field_with_problem:
+                  type: array
+                  description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
                   items:
                     type: string
-                - type: string
+              detail:
+                oneOf:
+                  - type: array
+                    items:
+                      type: string
+                  - type: string
             examples:
               null_in_request_data:
                 value:
