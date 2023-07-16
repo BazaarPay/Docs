@@ -368,7 +368,7 @@ components:
       $ref: './docs_fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه ارورهای پرداخت
+### نمونه OpenAPI ارورهای پرداخت
 
 ```yaml
 components:
