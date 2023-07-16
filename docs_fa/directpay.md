@@ -1,14 +1,16 @@
-## DirectPay
+# دایرکت‌پی
 
 این فرآیند برای پرداخت مستقیم از سمت پذیرنده (merchant) بدون دخالت کاربر در مواردی همچون تمدید خودکار اشتراک استفاده
 می‌شود.
 
-#### Initiate contract:
+## ایجاد توکن قرارداد دایرکت‌پی
 
 برای ساخت قرارداد دایرکت پی پذیرنده (merchant) باید محدودیت حداکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند.
 
 به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد
 توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
+
+### نمونه OpenAPI
 
 ```yaml
 openapi: 3.1.0
@@ -78,7 +80,7 @@ components:
       $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
-cURL Example:
+### نمونه cURL
 
 ```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init' \
@@ -90,7 +92,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 }'
 ```
 
-Success Response Example:
+### نمونه موفق پاسخ درخواست
 
 ```json
 {
@@ -98,12 +100,14 @@ Success Response Example:
 }
 ```
 
-#### Finalize Contract Without SDK:
+## فعال‌سازی/رد قرارداد دایرکت‌پی بدون Web SDK
 
 برای امضای قرارداد توسط کاربر، می‌بایست کاربر را به صفحه‌ی امضای قرارداد ریدایرکت کنید. برای این کار توکن قرارداد
 دریافتی از `init contract` را به همراه `redirect_url` به این آدرس پاس می‌دهید و کاربر پس از امضای قرارداد به کلاینت
 مرچنت
 ریدایرکت می‌شود.
+
+### نمونه OpenAPI
 
 ```yaml
 openapi: 3.1.0
@@ -147,7 +151,7 @@ paths:
         description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
-#### Open Finalize Contract flow:
+### فعال‌سازی/رد قرارداد دایرکت‌پی توسط Web SDK
 
 برای آغاز فلوی نهایی‌سازی قرارداد می‌بایست از sdk وب بازارپی استفاده نمایید.
 
@@ -167,7 +171,7 @@ startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
   مناسب
   آن مانند `این قرارداد قبلا فعال شده‌است و امکان تغییر وضعیت وجود ندارد.` نمایش داده می‌شود.
 
-###### startFinalizeContractProcess Arguments:
+#### startFinalizeContractProcess Arguments:
 
 ```yaml
 arguments:
@@ -179,7 +183,7 @@ arguments:
     type: string
 ```
 
-CallbackUrl Type:
+##### CallbackUrl Type
 
 ```yaml
 CallbackUrl:
@@ -199,6 +203,8 @@ CallbackUrl:
     - data
 ```
 
+##### CallbackUrl Interface
+
 ```typescript
 interface CallbackUrl {
     url?: string;
@@ -209,7 +215,11 @@ interface CallbackUrl {
 }
 ```
 
-#### Trace Contract:
+## پیگیری قرارداد دایرکت‌پی
+
+توسط این اندپوینت می‌توانید از وضعیت قرارداد مطلع شوید.
+
+### نمونه OpenAPI
 
 ```yaml
 openapi: 3.1.0
@@ -282,14 +292,14 @@ components:
       $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
-cURL Example:
+### نمونه cURL
 
 ```curl
 curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
-Success Response Example:
+### نمونه موفق پاسخ درخواست
 
 ```json
 {
@@ -301,12 +311,14 @@ Success Response Example:
 }
 ```
 
-#### Direct Pay:
+## پرداخت با دایرکت‌پی
 
 نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
 اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در
 اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
+
+### نمونه OpenAPI
 
 ```yaml
 openapi: 3.1.0
@@ -356,7 +368,7 @@ components:
       $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
-cURL Example:
+### نمونه cURL
 
 ```curl
 curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
@@ -369,7 +381,8 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lan
 
 * در صورت موفقیت، یک رسپانس خالی را برمی‌گرداند.
 * نسبت به توکن چک‌اوت، idempotent است.
-* تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست و
+* تفاوت این روش با پرداخت عادی که از طریق SDK توسط کاربر انجام می‌شود این است که نیازی به فراخوانی اندپوینت commit نیست
+  و
   اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
   اتمیک فراخوانی گردد.
 
