@@ -91,5 +91,5 @@ commit را صدا بزنید.
 استعلام کنید تا وضعیت نهایی مشخص شده باشد.
 
 - [Basic Payment Flow](./payment.md)
-- [DirectPay](./directpay.md)
+- [DirectPay](./direct-pay.md)
 - [Wallet Integration](./wallet.md)
