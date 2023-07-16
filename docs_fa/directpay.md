@@ -69,15 +69,15 @@ paths:
                     type: string
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/401'
         '400':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/400'
         '503':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -281,15 +281,15 @@ paths:
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
         '401':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/401'
         '400':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/400'
         '503':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -351,21 +351,89 @@ paths:
         '204':
           description: Success
         '401':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/401'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/401'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 anyOf:
-                  - $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/400/content/application/json/schema'
-                  - $ref: './docs_fa/shared_components/directpay/pay-responses.yml#/responses/400/content/application/json/schema'
+                  - $ref: './docs_fa/shared_components/error-responses.yml#/responses/400/content/application/json/schema'
+                  - $ref: '#/components/schemas/PayResponse'
         '503':
-          $ref: './docs_fa/shared_components/general/error-responses.yml#/responses/503'
+          $ref: './docs_fa/shared_components/error-responses.yml#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './docs_fa/shared_components/general/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './docs_fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
+```
+
+### نمونه ارورهای پرداخت
+
+```yaml
+components:
+  schemas:
+    PayResponse:
+      type: object
+      properties:
+        oneOf:
+          json_object_name:
+          type: array
+          description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
+          items:
+            type: string
+        detail:
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: string
+        amount_limit:
+          type: array
+          items:
+            type: string
+        examples:
+          directpay_is_not_active:
+            value:
+              description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
+              detail: [ "قرارداد کاربر فعال نیست." ]
+          contract_pay_over_max:
+            value:
+              description: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
+              detail: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
+          wallet_balance_insufficient:
+            description: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
+            detail: "موجودی حساب کافی نیست."
+          direct_debit_balance_insufficient:
+            description: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
+            detail: "موجودی کافی در حساب بانکی خود ندارید"
+          direct_debit_under_min:
+            description: حداقل مجاز برای پرداخت با دایرکت دبیت که برابر با ۱۰۰۰ تومان است رعایت نشود
+            detail: "حداقل مقدار تراکنش ۱۰۰۰ ریال است."
+          direct_debit_not_active:
+            description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر فعال نباشد، منقضی شده باشد، لغو شده باشد یا دایرکت دبیت به صورت موقت غیرفعال باشد
+            detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
+          checkout_token_expired:
+            description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
+            detail: "Checkout is timed out"
+          direct_debit_card_expired:
+            description: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
+            detail: "کارت غیرفعال می‌باشد."
+          direct_debit_service_down:
+            description: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
+            detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
+          direct_debit_disabled_by_user:
+            description: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
+            detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
+          direct_debit_over_max_per_transaction:
+            description: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
+          direct_debit_over_max_per_day:
+            description: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+          direct_debit_over_max_transactions_per_day:
+            description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
+            detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
 ```
 
 ### نمونه cURL
