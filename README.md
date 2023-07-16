@@ -1,5 +1,5 @@
 <p style="text-align:center;">
-  <img src="IdeaProjects/Docs-new/assets/bazaar-pay-logo-en.png" alt="BazaarPay Logo"/>
+  <img src="./assets/bazaar-pay-logo-en.png" alt="BazaarPay Logo"/>
 </p>
 
 Payment service technical documentation
