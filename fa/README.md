@@ -1,21 +1,21 @@
 ```mermaid
 sequenceDiagram
-    participant Merchant
-    participant User
-    participant BazaarPay
+    participant مرچنت
+    participant کاربر
+    participant بازارپی
 
-    Merchant ->> BazaarPay: Init checkout
-    Note over BazaarPay: Create checkout record
-    BazaarPay ->> Merchant: checkout_token
+    مرچنت ->> بازارپی: Init checkout
+    Note over بازارپی: ایجاد توکن چک اوت (خرید)
+    بازارپی ->> مرچنت: checkout_token
 
-    Note over Merchant: Start user payment flow
-    Merchant ->> User: Open popup / Redirect user to BazaarPay
-    User ->> BazaarPay: User pays with some method to BazaarPay
-    BazaarPay ->> Merchant: BazaarPay creates transaction from user to merchant and redirects user to merchant
+    Note over مرچنت: شروع فرآیند خرید کاربر
+    مرچنت ->> کاربر: باز شدن پاپ‌آپ/منتقل شدن کاربر به بازارپی
+    کاربر ->> بازارپی: پرداخت توسط کاربر توسط یک متد پرداخت (کیف پول، دایرکت‌دبیت و ...)
+    بازارپی ->> مرچنت: ایجاد تراکنش خرید توسط بازارپی،‌سپس انتقال کاربر به مرچنت
 
-    Note over Merchant: Merchant gives product or service to user
-    Merchant ->> BazaarPay: Commit
-    Note over BazaarPay: Commits transaction
+    Note over مرچنت: ارایه خدمت یا محصول توسط مرچنت به کاربر
+    مرچنت ->> بازارپی: Commit
+    Note over بازارپی: تایید تراکنش
 ```
 
 به فرآیند پرداختی که کاربر آن را طی می‌کند تا پولی را به پذیرنده (merchant) بپردازد، چک‌اوت (Checkout) گفته می‌شود.
