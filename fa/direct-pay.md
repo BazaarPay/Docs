@@ -401,7 +401,7 @@ components:
                 type: string
             - type: string
         examples:
-          directpay_is_not_active:
+          direct_pay_is_not_active:
             value:
               description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
               detail: [ "قرارداد کاربر فعال نیست." ]
