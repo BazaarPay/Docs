@@ -1,6 +1,6 @@
-## Payment
+# پرداخت
 
-#### Initiate Checkout:
+## ایجاد چک‌اوت توکن
 
 ```yaml
 paths:
@@ -14,13 +14,23 @@ paths:
               amount:
                 type: int
                 format: int64
+                required: true
                 example: 50000
+                minimum: 0
+                maximum: 1,000,000,000
+                description: مقدار توکن چگ‌اوت
               destination:
                 type: string
+                required: true
                 example: "developers"
+                description: نام مرچنت که به ازای هر مرچنت یکتا است
               service_name:
                 type: string
-                example: "service"
+                required: true
+                minimum: 1
+                maximum: 512
+                example: "product 1"
+                description: نام سرویس/خدمت ارایه شده
       responses:
         '200':
           content:
@@ -35,26 +45,30 @@ paths:
                   example: "https://cafebazaar.ir/user/payment?token=0123456789"
 ```
 
-example:
+### نمونه cURL
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/checkout/init/' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "amount": 50000,
     "destination": "developers",
-    "service_name": "service"
+    "service_name": "product 1"
 }'
+```
 
+### نمونه پاسخ درخواست
+
+```json
 {
-  "checkout_token":"0123456789",
-  "payment_url":"https://cafebazaar.ir/user/payment?token=0123456789"
+	"checkout_token": "0123456789",
+	"payment_url": "https://cafebazaar.ir/user/payment?token=0123456789"
 }
 ```
 
-### Payment Flow:
+## فلو پرداخت
 
-#### Web SDK:
+### Web SDK
 
 پس از گرفتن توکن چک‌اوت می‌بایست با استفاده از اسکریپت زیر پاپ‌آپ بازارپی برای کاربر باز شود.
 
@@ -75,7 +89,7 @@ interface CallbackUrl {
 }
 ```
 
-###### startPaymentProcess Arguments:
+#### startPaymentProcess Arguments:
 
 ```yaml
 arguments:
@@ -87,7 +101,7 @@ arguments:
     type: string
 ```
 
-#### [Android SDK](https://github.com/cafebazaar/BazaarPay):
+#### [Android SDK](https://github.com/cafebazaar/BazaarPay)
 
 استفاده از کیت توسعه اندروید بازارپی بسیار ساده است. شما فقط باید یک نمونه از کلاس BazaarPayLauncher ایجاد کنید. سپس از
 این نمونه برای شروع فرآیند پرداخت با فراخوانی تابع launchBazaarPay استفاده کنید.
@@ -146,7 +160,7 @@ https://cafebazaar.ir/user/payment?token=my_checkout_token
 Redirect user to:
 https://cafebazaar.ir/user/payment?token=my_checkout_token&redirect_url=https://your-web-site.omg/status&phone=09194950906
 
-#### Commit:
+## تایید خرید
 
 صدا زدن این ای‌پی‌آی به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این ای‌پی‌آی تراکنش
 ثبت شده نهایی شده و در صورت عدم صدا زدن این ای‌پی‌آی کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
@@ -169,9 +183,9 @@ paths:
           description: checkout committed successfully
 ```
 
-example:
+### نمونه cURL
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/commit/' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -180,7 +194,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 
 ```
 
-#### Refund/Partial Refund:
+## بازگشت کامل/جزیی خرید
 
 ```yaml
 paths:
@@ -204,13 +218,13 @@ paths:
           description: refunded successfully
 ```
 
-تنها نسبت به توکن چک‌اوت، idempotent است.
-به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این ای‌پی‌آی
-خواهد بود.
+* تنها نسبت به توکن چک‌اوت، idempotent است.
+* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این ای‌پی‌آی
+  خواهد بود.
 
-example:
+### نمونه cURL
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/refund/' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Token some_auth_token \
@@ -219,7 +233,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 }'
 ```
 
-#### Trace:
+## پیگیری خرید
 
 ```yaml
 paths:
@@ -251,19 +265,25 @@ paths:
                   example: "paid_committed"
 ```
 
-example:
+### نمونه cURL
 
-```bash
+```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/trace/' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "checkout_token": "some_token"
   }'
-
-{"status":"paid_committed"}
 ```
 
-#### Checkouts Status Report:
+### نمونه پاسخ موفق درخواست
+
+```json
+{
+	"status": "paid_committed"
+}
+```
+
+## گزارش وضعیت چک‌اوت‌ها
 
 ```yaml
 paths:
@@ -330,54 +350,58 @@ paths:
                   description: url to request for previous page of checkouts
 ```
 
-فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
-اگر مقدار filter_date_by برابر refund_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
-refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده اند در خروجی نمایش داده می‌شوند.
+* فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
+* اگر مقدار filter_date_by برابر refund_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
+  refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده اند در خروجی نمایش داده می‌شوند.
 
-example:
+### نمونه cURL
 
-```bash
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v0/get-checkouts-status/' \
+```curl
+curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/get-checkouts-status/' \
 --header 'Authorization: Token {token}' --header 'Content-Type: application/json' \
 --data-raw '{
     "start_datetime": "2022-11-15T00:00", "end_datetime": "2022-11-15T14:00", "filter_date_by": "creation_date"
 }'
+```
 
+### نمونه پاسخ موفق درخواست
+
+```json
 {
-  "checkouts": [
-    {
-      "token": "checkout_token1",
-      "amount": 90000,
-      "service_name": "service name 1",
-      "created_datetime": "2022-11-14T21:13:12.030613Z",
-      "status": "timed_out",
-      "commit_datetime": null,
-      "refund_datetime": null,
-      "is_committed": true
-    },
-    {
-      "token": "checkout_token2",
-      "amount": 50000,
-      "service_name": "service name 2",
-      "created_datetime": "2022-11-14T21:13:12.030613Z",
-      "status": "paid_commited",
-      "commit_datetime": "2022-11-14T21:13:12.030613Z",
-      "refund_datetime": null,
-      "is_committed": false
-    },,
-    {
-      "token": "checkout_token2",
-      "amount": 50000,
-      "service_name": "service name 2",
-      "created_datetime": "2022-11-14T21:13:12.030613Z",
-      "status": "refunded",
-      "commit_datetime": "2022-11-14T21:13:12.030613Z",
-      "refund_datetime": "2022-11-14T21:13:12.030613Z",
-      "is_committed": true
-    },
-  ]
-  "next": "https://pardakht-secure.cafebazaar.org/pardakht/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
-  "previous":null,
+	"checkouts": [
+		{
+			"token": "checkout_token1",
+			"amount": 90000,
+			"service_name": "service name 1",
+			"created_datetime": "2022-11-14T21:13:12.030613Z",
+			"status": "timed_out",
+			"commit_datetime": null,
+			"refund_datetime": null,
+			"is_committed": true
+		},
+		{
+			"token": "checkout_token2",
+			"amount": 50000,
+			"service_name": "service name 2",
+			"created_datetime": "2022-11-14T21:13:12.030613Z",
+			"status": "paid_committed",
+			"commit_datetime": "2022-11-14T21:13:12.030613Z",
+			"refund_datetime": null,
+			"is_committed": false
+		},
+		{
+			"token": "checkout_token2",
+			"amount": 50000,
+			"service_name": "service name 2",
+			"created_datetime": "2022-11-14T21:13:12.030613Z",
+			"status": "refunded",
+			"commit_datetime": "2022-11-14T21:13:12.030613Z",
+			"refund_datetime": "2022-11-14T21:13:12.030613Z",
+			"is_committed": true
+		}
+	],
+	"next": "https://pardakht-secure.cafebazaar.org/pardakht/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
+	"previous": null
 }
 ```
 
