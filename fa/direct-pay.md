@@ -328,7 +328,7 @@ info:
 servers:
   - url: https://pardakht.cafebazaar.ir
 paths:
-  /direct-pay/:
+  /pardakht/badje/v1/direct-pay/:
     post:
       summary: pay-with-contract
       requestBody:
