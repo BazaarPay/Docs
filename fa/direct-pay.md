@@ -17,10 +17,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
-servers:
-  - url: 'https://pardakht.cafebazaar.ir'
 paths:
-  /pardakht/badje/v1/direct-pay/contract/init:
+  /direct-pay/contract/init:
     post:
       requestBody:
         content:
@@ -114,10 +112,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay Web
   version: 1.0.0
-servers:
-  - url: 'https://cafebazaar.ir'
 paths:
-  /bazaar-pay/contract/direct-pay:
+  /contract/direct-pay:
     summary: finalize-contract-without-sdk
     description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
     parameters:
@@ -226,10 +222,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
-servers:
-  - url: https://pardakht.cafebazaar.ir
 paths:
-  /pardakht/badje/v1/direct-pay/contract/trace/:
+  /direct-pay/contract/trace:
     get:
       summary: trace-contract
       parameters:
@@ -325,10 +319,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
-servers:
-  - url: https://pardakht.cafebazaar.ir
 paths:
-  /pardakht/badje/v1/direct-pay/:
+  /direct-pay:
     post:
       summary: pay-with-contract
       requestBody:
@@ -357,7 +349,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf: 
+                oneOf:
                   - $ref: './fa/shared_components/error-responses.yml#/responses/400/content/application/json/schema'
                   - $ref: '#/components/schemas/PayResponse'
         '503':
@@ -371,7 +363,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay?lang=fa' \
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay' \
 --header 'Authorization: Token {merchant_token}' \
 --data '{
     "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
