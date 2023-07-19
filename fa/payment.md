@@ -4,7 +4,7 @@
 
 ```yaml
 paths:
-  { base_url }/checkout/init/
+  /checkout/init/:
     post:
       summary: init-checkout
       requestBody:
@@ -57,7 +57,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 }'
 ```
 
-### نمونه پاسخ درخواست
+### نمونه پاسخ موفق درخواست
 
 ```json
 {
@@ -69,6 +69,10 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ## فلو پرداخت
 
 ### Web SDK
+
+در ابتدا این پکیج را با توضیحاتی که در لینک زیر قرار دارد نصب کنید:
+
+[پکیج SDK وب](https://www.npmjs.com/package/@cafebazaar/payment-sdk)
 
 پس از گرفتن توکن چک‌اوت می‌بایست با استفاده از اسکریپت زیر پاپ‌آپ بازارپی برای کاربر باز شود.
 
@@ -101,38 +105,13 @@ arguments:
     type: string
 ```
 
-#### [Android SDK](https://github.com/cafebazaar/BazaarPay)
+### Android SDK
 
-استفاده از کیت توسعه اندروید بازارپی بسیار ساده است. شما فقط باید یک نمونه از کلاس BazaarPayLauncher ایجاد کنید. سپس از
-این نمونه برای شروع فرآیند پرداخت با فراخوانی تابع launchBazaarPay استفاده کنید.
+برای پیاده‌سازی این نوع روش پراخت به آدرس زیر مراجعه کنید:
 
-سه نکته وجود دارد که باید در نظر بگیرید:
+[Android SDK Guide](https://github.com/cafebazaar/BazaarPay)
 
-۱. شما باید یک نمونه از BazaarPayLauncher را به عنوان ویژگی کلاس ایجاد کنید. (این مورد اجباری است زیرا از Activity
-Result API استفاده می کند. برای کسب اطلاعات بیشتر به این لینک مراجعه کنید.)
-
-۲. هنگام ایجاد یک نمونه جدید از کلاس BazaarPayLauncher باید سه پارامتر را پاس کنید:
-
-- context: باید پیاده‌سازی رابط ActivityResultCaller باشد.
-- onSuccess: این تابع پس از یک فرآیند پرداخت موفق فراخوانی می شود.
-- onCancel: اگر فرآیند پرداخت با موفقیت به پایان نرسد (لغو توسط کاربر) این تابع فراخوانی می‌شود.
-
-۳. هنگام فراخوانی تابع launchBazaarPay باید checkout توکن دریافتی پرداخت را به عنوان پارامتر ارسال کنید. ضمن اینکه
-می‌توانید شماره تلفن کاربر هم به عنوان پارامتر اختیاری phoneNumber ارسال نمایید تا به صورت پیش‌فرض در فیلد شماره تلفن
-مربوط به لاگین قرار گیرد. دو پارامتر اختیاری دیگر با مقادیر پیش فرض وجود دارد (isEnglish = false / isDarkMode = false).
-با استفاده از این پارامترها می توانید زبان (پیش فرض فارسی است) و حالت تاریک (پیش فرض روشن است) را به صورت دستی تنظیم
-کنید.
-
-نکته‌ی مهم: در پایان خرید موفق کاربر، شما باید در سمت سرور خرید کاربر را توسط API Commit تایید کنید. صدا زدن این
-ای‌پی‌آی به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این ای‌پی‌آی تراکنش ثبت شده
-نهایی شده و در صورت عدم صدا زدن این ای‌پی‌آی کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز خواهد
-گشت. راه توصیه شده برای انجام این کار فراخوانی توسط سرور است، در صورتی که برنامه دارای سرور نیست این امکان در SDK فراهم
-شده است. این کار توسط فراخوانی متد commit با پارامتر ورودی checkout توکن انجام می‌شود، در صورتی که موفقیت آمیز باشد متد
-onSuccess اجرا شده و در غیر این صورت خطای مورد نظر به تابع onFailure پاس داده می‌شود. نکته‌ی دیگر این که این متد suspend
-بوده و برای فراخوانی آن باید از کوروتین استفاده نمایید، در غیر این صورت طبق راهنمای ای‌پی‌آی commit فراخوانی را بر اساس
-تکنولوژی مورد استفاده‌ی خود انجام دهید.
-
-#### Without SDK:
+### Without SDK
 
 در صورتی که پذیرنده به هر دلیلی امکان پیاده‌سازی SDK را نداشته باشد یا برای پلتفرم مورد نظر SDK وجود نداشته باشد،
 به‌صورت مستقیم می‌توان کاربر را به درگاه بازارپی هدایت کرد و پس از آنکه کاربر فلوی پرداخت را طی نمود، کاربر با وضعیت
@@ -162,13 +141,13 @@ https://cafebazaar.ir/user/payment?token=my_checkout_token&redirect_url=https://
 
 ## تایید خرید
 
-صدا زدن این ای‌پی‌آی به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این ای‌پی‌آی تراکنش
-ثبت شده نهایی شده و در صورت عدم صدا زدن این ای‌پی‌آی کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
+صدا زدن این اندپوینت به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این اندپوینت تراکنش
+ثبت شده نهایی شده و در صورت عدم صدا زدن این اندپوینت کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
 خواهد گشت.
 
 ```yaml
 paths:
-  { base_url }/commit/
+  /commit/:
     post:
       summary: commit
       requestBody:
@@ -177,7 +156,7 @@ paths:
             schema:
               checkout_token:
                 type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از اندپوینت init checkout
       responses:
         '204':
           description: checkout committed successfully
@@ -198,7 +177,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 
 ```yaml
 paths:
-  { base_url }/refund/
+  /refund/:
     post:
       security: ApiKeyAuth
       summary: refund
@@ -208,7 +187,7 @@ paths:
             schema:
               checkout_token:
                 type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از اندپوینت init checkout
               amount:
                 type: int
                 description: refund amount
@@ -219,7 +198,7 @@ paths:
 ```
 
 * تنها نسبت به توکن چک‌اوت، idempotent است.
-* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این ای‌پی‌آی
+* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این اندپوینت
   خواهد بود.
 
 ### نمونه cURL
@@ -237,7 +216,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 
 ```yaml
 paths:
-  { base_url }/trace/
+  /trace/:
     post:
       summary: trace
       requestBody:
@@ -246,7 +225,7 @@ paths:
             schema:
               checkout_token:
                 type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از اندپوینت init checkout
                 example: "0123456789"
       responses:
         '200':
@@ -287,7 +266,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 
 ```yaml
 paths:
-  { base_url }/get-checkouts-status/
+  /get-checkouts-status/:
     post:
       summary: checkouts-status
       requestBody:
