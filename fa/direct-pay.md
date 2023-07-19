@@ -17,6 +17,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
   /direct-pay/contract/init:
     post:
@@ -112,6 +114,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay Web
   version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
   /contract/direct-pay:
     summary: finalize-contract-without-sdk
@@ -222,6 +226,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
   /direct-pay/contract/trace:
     get:
@@ -319,6 +325,8 @@ openapi: 3.1.0
 info:
   title: BazaarPay API
   version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
   /direct-pay:
     post:
