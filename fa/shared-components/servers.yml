@@ -8,6 +8,7 @@ servers:
       base_path:
         default: '/pardakht/badje/v1'
         description: مسیر پایه اندپوینت‌های بازارپی
+    example: 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/trace/'
   - url: 'https://{base_url}{base_path}'
     description: BazaarPay Web
     variables:
@@ -17,3 +18,4 @@ servers:
       base_path:
         default: '/bazaar-pay'
         description: مسیر پایه وب بازارپی
+    example: 'https://cafebazaar.ir/bazaar-pay/contract/direct-pay'
