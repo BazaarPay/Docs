@@ -57,7 +57,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -228,7 +228,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 * تنها نسبت به توکن چک‌اوت، idempotent است.
@@ -290,7 +290,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -390,7 +390,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 * فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.

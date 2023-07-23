@@ -1,3 +1,4 @@
+```yaml
 securitySchemes:
   ApiKeyAuth:
     type: apiKey
@@ -5,3 +6,4 @@ securitySchemes:
     name: Authorization
     scheme: Token
     description: توکن احراز هویت
+```
