@@ -3,46 +3,61 @@
 ## ایجاد چک‌اوت توکن
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
-  { base_url }/checkout/init/
+  /checkout/init/:
     post:
       summary: init-checkout
       requestBody:
         content:
           application/json:
             schema:
-              amount:
-                type: int
-                format: int64
-                required: true
-                example: 50000
-                minimum: 0
-                maximum: 1,000,000,000
-                description: مقدار توکن چگ‌اوت
-              destination:
-                type: string
-                required: true
-                example: "developers"
-                description: نام مرچنت که به ازای هر مرچنت یکتا است
-              service_name:
-                type: string
-                required: true
-                minimum: 1
-                maximum: 512
-                example: "product 1"
-                description: نام سرویس/خدمت ارایه شده
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  format: int64
+                  required: true
+                  example: 50000
+                  minimum: 0
+                  maximum: 1000000000
+                  description: مقدار توکن چگ‌اوت
+                destination:
+                  type: string
+                  required: true
+                  example: "developers"
+                  description: نام مرچنت که به ازای هر مرچنت یکتا است
+                service_name:
+                  type: string
+                  required: true
+                  minimum: 1
+                  maximum: 512
+                  example: "product 1"
+                  description: نام سرویس/خدمت ارایه شده
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
-                checkout_token:
-                  type: string
-                  example: "0123456789"
-                payment_url:
-                  type: string
-                  format: url
-                  example: "https://cafebazaar.ir/user/payment?token=0123456789"
+                type: object
+                properties:
+                  checkout_token:
+                    type: string
+                    example: "0123456789"
+                  payment_url:
+                    type: string
+                    format: url
+                    example: "https://cafebazaar.ir/user/payment?token=0123456789"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -57,7 +72,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 }'
 ```
 
-### نمونه پاسخ درخواست
+### نمونه پاسخ موفق درخواست
 
 ```json
 {
@@ -69,6 +84,10 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ## فلو پرداخت
 
 ### Web SDK
+
+در ابتدا این پکیج را با توضیحاتی که در لینک زیر قرار دارد نصب کنید:
+
+[پکیج SDK وب](https://www.npmjs.com/package/@cafebazaar/payment-sdk)
 
 پس از گرفتن توکن چک‌اوت می‌بایست با استفاده از اسکریپت زیر پاپ‌آپ بازارپی برای کاربر باز شود.
 
@@ -101,38 +120,13 @@ arguments:
     type: string
 ```
 
-#### [Android SDK](https://github.com/cafebazaar/BazaarPay)
+### Android SDK
 
-استفاده از کیت توسعه اندروید بازارپی بسیار ساده است. شما فقط باید یک نمونه از کلاس BazaarPayLauncher ایجاد کنید. سپس از
-این نمونه برای شروع فرآیند پرداخت با فراخوانی تابع launchBazaarPay استفاده کنید.
+برای پیاده‌سازی این نوع روش پراخت به آدرس زیر مراجعه کنید:
 
-سه نکته وجود دارد که باید در نظر بگیرید:
+[Android SDK Guide](https://github.com/cafebazaar/BazaarPay)
 
-۱. شما باید یک نمونه از BazaarPayLauncher را به عنوان ویژگی کلاس ایجاد کنید. (این مورد اجباری است زیرا از Activity
-Result API استفاده می کند. برای کسب اطلاعات بیشتر به این لینک مراجعه کنید.)
-
-۲. هنگام ایجاد یک نمونه جدید از کلاس BazaarPayLauncher باید سه پارامتر را پاس کنید:
-
-- context: باید پیاده‌سازی رابط ActivityResultCaller باشد.
-- onSuccess: این تابع پس از یک فرآیند پرداخت موفق فراخوانی می شود.
-- onCancel: اگر فرآیند پرداخت با موفقیت به پایان نرسد (لغو توسط کاربر) این تابع فراخوانی می‌شود.
-
-۳. هنگام فراخوانی تابع launchBazaarPay باید checkout توکن دریافتی پرداخت را به عنوان پارامتر ارسال کنید. ضمن اینکه
-می‌توانید شماره تلفن کاربر هم به عنوان پارامتر اختیاری phoneNumber ارسال نمایید تا به صورت پیش‌فرض در فیلد شماره تلفن
-مربوط به لاگین قرار گیرد. دو پارامتر اختیاری دیگر با مقادیر پیش فرض وجود دارد (isEnglish = false / isDarkMode = false).
-با استفاده از این پارامترها می توانید زبان (پیش فرض فارسی است) و حالت تاریک (پیش فرض روشن است) را به صورت دستی تنظیم
-کنید.
-
-نکته‌ی مهم: در پایان خرید موفق کاربر، شما باید در سمت سرور خرید کاربر را توسط API Commit تایید کنید. صدا زدن این
-ای‌پی‌آی به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این ای‌پی‌آی تراکنش ثبت شده
-نهایی شده و در صورت عدم صدا زدن این ای‌پی‌آی کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز خواهد
-گشت. راه توصیه شده برای انجام این کار فراخوانی توسط سرور است، در صورتی که برنامه دارای سرور نیست این امکان در SDK فراهم
-شده است. این کار توسط فراخوانی متد commit با پارامتر ورودی checkout توکن انجام می‌شود، در صورتی که موفقیت آمیز باشد متد
-onSuccess اجرا شده و در غیر این صورت خطای مورد نظر به تابع onFailure پاس داده می‌شود. نکته‌ی دیگر این که این متد suspend
-بوده و برای فراخوانی آن باید از کوروتین استفاده نمایید، در غیر این صورت طبق راهنمای ای‌پی‌آی commit فراخوانی را بر اساس
-تکنولوژی مورد استفاده‌ی خود انجام دهید.
-
-#### Without SDK:
+### Without SDK
 
 در صورتی که پذیرنده به هر دلیلی امکان پیاده‌سازی SDK را نداشته باشد یا برای پلتفرم مورد نظر SDK وجود نداشته باشد،
 به‌صورت مستقیم می‌توان کاربر را به درگاه بازارپی هدایت کرد و پس از آنکه کاربر فلوی پرداخت را طی نمود، کاربر با وضعیت
@@ -162,22 +156,30 @@ https://cafebazaar.ir/user/payment?token=my_checkout_token&redirect_url=https://
 
 ## تایید خرید
 
-صدا زدن این ای‌پی‌آی به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این ای‌پی‌آی تراکنش
-ثبت شده نهایی شده و در صورت عدم صدا زدن این ای‌پی‌آی کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
+صدا زدن این اندپوینت به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این اندپوینت تراکنش
+ثبت شده نهایی شده و در صورت عدم صدا زدن این اندپوینت کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
 خواهد گشت.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
-  { base_url }/commit/
+  /commit/:
     post:
       summary: commit
       requestBody:
         content:
           application/json:
             schema:
-              checkout_token:
-                type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
+              type: object
+              properties:
+                checkout_token:
+                  type: string
+                  description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
       responses:
         '204':
           description: checkout committed successfully
@@ -197,29 +199,40 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ## بازگشت کامل/جزیی خرید
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
-  { base_url }/refund/
+  /refund/:
     post:
-      security: ApiKeyAuth
       summary: refund
       requestBody:
         content:
           application/json:
             schema:
-              checkout_token:
-                type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
-              amount:
-                type: int
-                description: refund amount
-                required: false
+              type: object
+              properties:
+                checkout_token:
+                  type: string
+                  description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
+                amount:
+                  type: integer
+                  description: مقداری که نیاز است از خرید بازگشت داده شود، در صورتی که مقداردهی نشود به صورت کلی بازگشت داده می‌شود
+                  required: false
       responses:
         '204':
           description: refunded successfully
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 * تنها نسبت به توکن چک‌اوت، idempotent است.
-* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این ای‌پی‌آی
+* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این اندپوینت
   خواهد بود.
 
 ### نمونه cURL
@@ -236,33 +249,48 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ## پیگیری خرید
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
-  { base_url }/trace/
+  /trace/:
     post:
       summary: trace
       requestBody:
         content:
           application/json:
             schema:
-              checkout_token:
-                type: string
-                description: contract_token received from init-checkout / توکن چک‌اوت گرفته شده از ای‌پی‌آی init checkout
-                example: "0123456789"
+              type: object
+              properties:
+                checkout_token:
+                  type: string
+                  description: توکن چک‌اوت گرفته شده از اندپوینت init checkout
+                  example: "0123456789"
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
-                status:
-                  type: string
-                  enum:
-                    - invalid_token        # چک‌اوت توکن ورودی درست نیست.
-                    - unpaid               # کاربر پول را پرداخت نکرده است و زمان زیادی از ساخت چک اوت نگذشته است. در این حالت ممکن است کاربر هنوز در حال پرداخت باشد.
-                    - paid_not_committed   # کاربر پول را پرداخت کرده است ولی کامیت نشده است. ممکن است که پول به کیف پول کاربر بازگردانده شده باشد.
-                    - paid_committed       # کاربر پول را پرداخته کرده و توسط مرچنت کامیت هم شده است.
-                    - refunded             # پرداخت کاربر پس از کامیت شدن به کیف پولش بازگشته است. ریفاند حتما توسط مرچنت انجام شده است.
-                    - timed_out            # کاربر پول را پرداخت نکرده است. (فرآیند کنسل شده است) 
-                  example: "paid_committed"
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - invalid_token        # چک‌اوت توکن ورودی درست نیست.
+                      - unpaid               # کاربر پول را پرداخت نکرده است و زمان زیادی از ساخت چک اوت نگذشته است. در این حالت ممکن است کاربر هنوز در حال پرداخت باشد.
+                      - paid_not_committed   # کاربر پول را پرداخت کرده است ولی کامیت نشده است. ممکن است که پول به کیف پول کاربر بازگردانده شده باشد.
+                      - paid_committed       # کاربر پول را پرداخته کرده و توسط مرچنت کامیت هم شده است.
+                      - refunded             # پرداخت کاربر پس از کامیت شدن به کیف پولش بازگشته است. ریفاند حتما توسط مرچنت انجام شده است.
+                      - timed_out            # کاربر پول را پرداخت نکرده است. (فرآیند کنسل شده است) 
+                    example: "paid_committed"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -286,73 +314,88 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ## گزارش وضعیت چک‌اوت‌ها
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
 paths:
-  { base_url }/get-checkouts-status/
+  /get-checkouts-status/:
     post:
       summary: checkouts-status
       requestBody:
         content:
           application/json:
             schema:
-              start_datetime:
-                type: string
-                format: iso-8601
-                description: زمان ساخت
-                example: "2022-11-15T00:00"
-              end_time:
-                type: string
-                format: iso-8601
-                description: زمان ریفاند
-                example: "2022-11-15T14:00"
-              filter_date_by:
-                type: string
-                enum:
-                  - creation_date
-                  - refund_date
+              type: object
+              properties:
+                start_datetime:
+                  type: string
+                  format: iso-8601
+                  description: زمان ساخت
+                  example: "2022-11-15T00:00"
+                end_time:
+                  type: string
+                  format: iso-8601
+                  description: زمان ریفاند
+                  example: "2022-11-15T14:00"
+                filter_date_by:
+                  type: string
+                  enum:
+                    - creation_date
+                    - refund_date
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
-                checkouts:
-                  type: array
-                  items:
-                    oneOf:
-                      - type: object
-                        properties:
-                          token:
-                            type: string
-                          amount:
-                            type: int
-                          service_name:
-                            type: string
-                          created_datetime:
-                            type: string
-                            format: iso-8601
-                          status:
-                            type: string
-                            enum: [ invalid_token, unpaid,paid_not_committed, paid_committed, refunded, timed_out ]
-                          is_committed:
-                            type: boolean
-                          commit_datetime:
-                            type: string
-                            format: iso-8601
-                          refund_datetime:
-                            type: string
-                            format: iso-8601
-                next:
-                  type: string
-                  format: url
-                  description: url to request for next page of checkouts
-                previous:
-                  type: string
-                  format: url
-                  description: url to request for previous page of checkouts
+                type: object
+                properties:
+                  checkouts:
+                    type: array
+                    items:
+                      oneOf:
+                        - type: object
+                          properties:
+                            token:
+                              type: string
+                            amount:
+                              type: integer
+                            service_name:
+                              type: string
+                            created_datetime:
+                              type: string
+                              format: iso-8601
+                            status:
+                              type: string
+                              enum: [ invalid_token, unpaid,paid_not_committed, paid_committed, refunded, timed_out ]
+                            is_committed:
+                              type: boolean
+                            commit_datetime:
+                              type: string
+                              format: iso-8601
+                            refund_datetime:
+                              type: string
+                              format: iso-8601
+                  next:
+                    type: string
+                    format: url
+                    description: url to request for next page of checkouts
+                  previous:
+                    type: string
+                    format: url
+                    description: url to request for previous page of checkouts
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.yml#/securitySchemes/ApiKeyAuth'
 ```
 
 * فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
 * اگر مقدار filter_date_by برابر refund_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
-  refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده اند در خروجی نمایش داده می‌شوند.
+  refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده‌اند در خروجی نمایش داده می‌شوند.
 
 ### نمونه cURL
 
