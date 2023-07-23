@@ -1,3 +1,4 @@
+```yaml
 servers:
   - url: 'https://{base_url}{base_path}'
     description: BazaarPay API
@@ -19,3 +20,4 @@ servers:
         default: '/bazaar-pay'
         description: مسیر پایه وب بازارپی
     example: 'https://cafebazaar.ir/bazaar-pay/contract/direct-pay'
+```

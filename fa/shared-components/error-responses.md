@@ -1,3 +1,4 @@
+```yaml
 responses:
   '401':
     description: Unauthorized
@@ -58,3 +59,4 @@ responses:
             <hr><center>nginx</center>
             </body>
             </html>
+```
