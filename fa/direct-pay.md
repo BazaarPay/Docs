@@ -20,7 +20,7 @@ info:
 servers:
   - url: 'https://{base_url}{base_path}'
 paths:
-  /direct-pay/contract/init:
+  /direct-pay/contract/init/:
     post:
       requestBody:
         content:
@@ -83,7 +83,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init' \
+curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init/' \
 --header 'Authorization: Token {merchant_token}' \
 --data-raw '{
     "type": "wallet"
@@ -229,7 +229,7 @@ info:
 servers:
   - url: 'https://{base_url}{base_path}'
 paths:
-  /direct-pay/contract/trace:
+  /direct-pay/contract/trace/:
     get:
       summary: trace-contract
       parameters:
@@ -295,7 +295,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
@@ -328,7 +328,7 @@ info:
 servers:
   - url: 'https://{base_url}{base_path}'
 paths:
-  /direct-pay:
+  /direct-pay/:
     post:
       summary: pay-with-contract
       requestBody:
@@ -371,7 +371,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay' \
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
 --header 'Authorization: Token {merchant_token}' \
 --data '{
     "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",
