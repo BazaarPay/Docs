@@ -423,7 +423,7 @@ components:
             detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
           checkout_token_expired:
             description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
-            detail: "Checkout is timed out"
+            detail: "توکن پرداخت منقضی شده است، لطفاً فرآیند پرداخت را از اول آغاز کنید."
           direct_debit_card_expired:
             description: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
             detail: "کارت غیرفعال می‌باشد."
@@ -442,4 +442,7 @@ components:
           direct_debit_over_max_transactions_per_day:
             description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
             detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+          user_account_disabled:
+            description: حساب کاربر غیرفعال باشد.
+            detail: "حساب غیرفعال است."
 ```
