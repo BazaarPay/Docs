@@ -261,7 +261,7 @@ paths:
                       - new: قرارداد به تازگی ساخته شده است. ممکن است کاربر هنوز در پروسه‌ی دادن رضایت باشد
                       - active: قراداد فعال است و می‌توان پرداخت‌مستقیم انجام داد
                       - declined: قراداد توسط کاربر رد شده است
-                      - cancelled: قرارداد به دلیل اینکه کاربر اکشنی انجام نداده است منقضی شده است و اعتبار ندارد
+                      - cancelled: مرچنت قرارداد کاربر را لغو کرده است
                   expiration_time:
                     type: string
                     example: 2024-06-25T09:28:34.668933Z
@@ -310,6 +310,65 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 	"limit_expiration_time": "2025-07-02T06:43:44.843212Z"
 }
 ```
+
+
+## لغو قرارداد دایرکت‌پی
+
+توسط این اندپوینت مرچنت می‌تواند قراردادهای فعال کاربر را لغو کند.
+درصورت مواجه با خطاهای دسته‌ي ۴۰۰ می‌توانید با فراخوانی اندپوینت trace از وضعیت فعلی قرارداد مطلع شوید. 
+
+### نمونه
+
+```yaml
+openapi: 3.1.0
+info:
+  title: BazaarPay API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path}'
+paths:
+  /direct-pay/contract/cancel/:
+    get:
+      summary: cancel-contract
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_token:
+                  type: string
+                  required: true
+                  example: 9bb790a3-44fd-486f-8ce8-38aa0scab069
+                  description: توکن قرارداد گرفته شده از اندپوینت Init Contract
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: './fa/shared_components/error-responses.md#/responses/401'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: './fa/shared_components/error-responses.md#/responses/400/content/application/json/schema'
+                  - $ref: '#/components/schemas/CancelResponse'
+        '503':
+          $ref: './fa/shared_components/error-responses.md#/responses/503'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+```
+
+### نمونه cURL
+
+```curl
+curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/cancel/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+--header 'Authorization: Token {merchant_token}' 
+```
+
 
 ## پرداخت با دایرکت‌پی
 
@@ -386,7 +445,7 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
   اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
   اتمیک فراخوانی گردد.
 
-### نمونه ارورهای پرداخت
+### نمونه خطاها
 
 ```yaml
 components:
@@ -445,4 +504,23 @@ components:
           user_account_disabled:
             description: حساب کاربر غیرفعال باشد.
             detail: "حساب غیرفعال است."
+    CancelResponse:
+      type: object
+      properties:
+        oneOf:
+          detail:
+            - type: string
+          contract_token:
+            - type: list
+              items:
+                - type: string
+        examples:
+          invalid_contract_token:
+            value:
+              description: توکن قرارداد ارسال شده توکن معتبری نیست
+              contract_token: ["توکن قرارداد صحیح نیست."]
+          bad_contract_token:
+            value:
+              description: توکن قرارداد ارسال شده قابلیت کنسل شدن را ندارد.(قرارداد فعال نشده باشد یا معتبر نباشد)
+              detail: "توکن قرارداد صحیح نیست." 
 ```
