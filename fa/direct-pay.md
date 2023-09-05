@@ -328,7 +328,7 @@ servers:
   - url: 'https://{base_url}{base_path}'
 paths:
   /direct-pay/contract/cancel/:
-    get:
+    post:
       summary: cancel-contract
       requestBody:
         content:
