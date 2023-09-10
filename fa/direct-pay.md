@@ -85,9 +85,10 @@ components:
 ```curl
 curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init/' \
 --header 'Authorization: Token {merchant_token}' \
+--header 'Content-Type: application/json' \
 --data-raw '{
-    "type": "wallet"
-    "period": "monthly"
+    "type": "wallet",
+    "period": "monthly",
     "amount_limit": 1000000
 }'
 ```
