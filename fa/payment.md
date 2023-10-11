@@ -13,6 +13,9 @@ paths:
   /checkout/init/:
     post:
       summary: init-checkout
+      security:
+        - { }
+        - ApiKeyAuth: [ ]
       requestBody:
         content:
           application/json:
@@ -59,6 +62,8 @@ components:
     ApiKeyAuth:
       $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
+
+در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
 
 ### نمونه cURL
 
@@ -171,6 +176,9 @@ paths:
   /commit/:
     post:
       summary: commit
+      security:
+        - { }
+        - ApiKeyAuth: [ ]
       requestBody:
         content:
           application/json:
@@ -183,7 +191,13 @@ paths:
       responses:
         '204':
           description: checkout committed successfully
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
 ```
+
+در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
 
 ### نمونه cURL
 
@@ -209,6 +223,8 @@ paths:
   /refund/:
     post:
       summary: refund
+      security:
+        - ApiKeyAuth: [ ]
       requestBody:
         content:
           application/json:
