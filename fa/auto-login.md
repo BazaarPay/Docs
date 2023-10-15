@@ -204,7 +204,7 @@ curl 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/user/info/' \
 }
 ```
 
-### نمونه خطاها
+## نمونه خطاها
 
 ```yaml
 components:
