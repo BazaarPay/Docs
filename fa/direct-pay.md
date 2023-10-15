@@ -447,8 +447,7 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
   اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
   اتمیک فراخوانی گردد.
 
-### نمونه خطاها
-
+## نمونه خطاها
 ```yaml
 components:
   schemas:
