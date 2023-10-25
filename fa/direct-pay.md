@@ -261,6 +261,7 @@ paths:
                       - active
                       - declined
                       - cancelled
+                      - expired
                     example: new
                     description: |
                       وضعیت قرار داد کاربر، مقدیر مجاز برابر است با:
@@ -268,6 +269,7 @@ paths:
                       - active: قراداد فعال است و می‌توان پرداخت‌مستقیم انجام داد
                       - declined: قراداد توسط کاربر رد شده است
                       - cancelled: مرچنت قرارداد کاربر را لغو کرده است
+                      - expired: قرارداد منقضی شده است
                   expiration_time:
                     type: string
                     example: 2024-06-25T09:28:34.668933Z
