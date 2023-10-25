@@ -135,7 +135,7 @@ paths:
         schema:
           type: string
           example: https://example.com/bazaar-pay-return/direct-pay-contract
-      - name: phone_number
+      - name: phone
         in: query
         required: false
         schema:
@@ -149,6 +149,12 @@ paths:
           type: string
           example: این یک پیام تست است
         description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
+```
+
+### نمونه آدرس
+
+```
+https://cafebazaar.ir/bazaar-pay/contract/direct-pay?contract_token={contract_token}&redirect_url={encoded_url}&phone={user_phone_number}&message={encoded_message}
 ```
 
 ### فعال‌سازی/رد قرارداد دایرکت‌پی توسط Web SDK
