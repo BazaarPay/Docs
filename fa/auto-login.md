@@ -261,12 +261,19 @@ components:
 در حالت عادی هر انتری پوینت تعدادی کوئری پارامز دارد که در هر قسمت به تفصیل در مستندات توضیح داده شده. برای استفاده از سرویس اتولاگین دراین سرویس‌ها، می‌بایست علاوه بر کوئری پارامز سرویس، کوئری `auto_login_token` را هم به سرویس پاس دهید و باقی فرآیند را وب سرویس انجام خواهد داد.
 
 ### نمونه پیاده‌سازی
+#### کوئری پارامز برای استفاده از سرویس پرداخت بازارپی
+```yaml
+queryParams:
+  # AutoLogin Query Param
+  - name: auto_login_token
+    type: string
+    description: User's AutoLogin access token
 
-```json
-QueryParams = {
-	"auto_login_token": "A1y.023e717-8b4c1045529003314f429f0.81f023z=",
-  // ...(Rest of Service's Params)
-}
+  # Service Query Params
+  - name: token
+    desctiption: Checkout Token
+    type: string
+  # ...Rest of Service Query Params
 ```
 
 #### سرویس پرداخت بدون اتولاگین
