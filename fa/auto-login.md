@@ -262,11 +262,18 @@ components:
 
 ### نمونه پیاده‌سازی
 
+```json
+QueryParams = {
+	"auto_login_token": "A1y.023e717-8b4c1045529003314f429f0.81f023z=",
+  // ...(Rest of Service's Params)
+}
+```
+
 #### سرویس پرداخت بدون اتولاگین
 ```
-  https://cafebazaar.ir/bazaar-pay/payment?checkout_token={checkout_token}&redirect_url={merchant_redirect_url}
+  https://cafebazaar.ir/bazaar-pay/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
 ```
 #### سرویس پرداخت با اتولاگین
 ```
-   https://cafebazaar.ir/bazaar-pay/payment?checkout_token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_v2_token}
+   https://cafebazaar.ir/bazaar-pay/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_v2_token}
 ```
