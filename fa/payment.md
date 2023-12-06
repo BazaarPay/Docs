@@ -296,12 +296,13 @@ paths:
                   status:
                     type: string
                     enum:
-                      - invalid_token        # چک‌اوت توکن ورودی درست نیست.
-                      - unpaid               # کاربر پول را پرداخت نکرده است و زمان زیادی از ساخت چک اوت نگذشته است. در این حالت ممکن است کاربر هنوز در حال پرداخت باشد.
-                      - paid_not_committed   # کاربر پول را پرداخت کرده است ولی کامیت نشده است. ممکن است که پول به کیف پول کاربر بازگردانده شده باشد.
-                      - paid_committed       # کاربر پول را پرداخته کرده و توسط مرچنت کامیت هم شده است.
-                      - refunded             # پرداخت کاربر پس از کامیت شدن به کیف پولش بازگشته است. ریفاند حتما توسط مرچنت انجام شده است.
-                      - timed_out            # کاربر پول را پرداخت نکرده است. (فرآیند کنسل شده است) 
+                      - invalid_token                 # چک‌اوت توکن ورودی درست نیست.
+                      - unpaid                        # کاربر پول را پرداخت نکرده است و زمان زیادی از ساخت چک اوت نگذشته است. در این حالت ممکن است کاربر هنوز در حال پرداخت باشد.
+                      - paid_not_committed            # کاربر پول را پرداخت کرده است ولی کامیت نشده است. ممکن است که پول به کیف پول کاربر بازگردانده شده باشد.
+                      - paid_not_committed_refunded   # کاربر پول را پرداخت کرده است ولی کامیت نشده است و بازه‌ی زمانی مجاز برای کامیت کردن سپری شده، پول به کیف پول کاربر بازگردانده شده است.
+                      - paid_committed                # کاربر پول را پرداخته کرده و توسط مرچنت کامیت هم شده است.
+                      - refunded                      # پرداخت کاربر پس از کامیت شدن به کیف پولش بازگشته است. ریفاند حتما توسط مرچنت انجام شده است.
+                      - timed_out                     # زمان استفاده از توکن به اتمام رسیده و توکن منقضی شده است. 
                     example: "paid_committed"
 components:
   securitySchemes:
@@ -360,6 +361,7 @@ paths:
                   type: string
                   enum:
                     - creation_date
+                    - payment_date
                     - refund_date
       responses:
         '200':
@@ -386,9 +388,18 @@ paths:
                               format: iso-8601
                             status:
                               type: string
-                              enum: [ invalid_token, unpaid,paid_not_committed, paid_committed, refunded, timed_out ]
+                              enum:
+                                - invalid_token
+                                - unpaid,paid_not_committed
+                                - paid_not_committed_refunded
+                                - paid_committed
+                                - refunded
+                                - timed_out
                             is_committed:
                               type: boolean
+                            payment_datetime:
+                              type: string
+                              format: iso-8601
                             commit_datetime:
                               type: string
                               format: iso-8601
@@ -412,6 +423,8 @@ components:
 * فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
 * اگر مقدار filter_date_by برابر refund_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
   refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده‌اند در خروجی نمایش داده می‌شوند.
+* اگر مقدار filter_date_by برابر payment_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
+  payment_datetime باشند. پس در نتیجه فقط checkout هایی که پرداخت شده‌اند در خروجی نمایش داده می‌شوند.
 
 ### نمونه cURL
 
@@ -434,6 +447,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 			"service_name": "service name 1",
 			"created_datetime": "2022-11-14T21:13:12.030613Z",
 			"status": "timed_out",
+			"payment_datetime": null,
 			"commit_datetime": null,
 			"refund_datetime": null,
 			"is_committed": true
@@ -444,6 +458,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 			"service_name": "service name 2",
 			"created_datetime": "2022-11-14T21:13:12.030613Z",
 			"status": "paid_committed",
+			"payment_datetime": "2022-11-14T21:13:12.030613Z",
 			"commit_datetime": "2022-11-14T21:13:12.030613Z",
 			"refund_datetime": null,
 			"is_committed": false
@@ -454,6 +469,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 			"service_name": "service name 2",
 			"created_datetime": "2022-11-14T21:13:12.030613Z",
 			"status": "refunded",
+			"payment_datetime": "2022-11-14T21:13:12.030613Z",
 			"commit_datetime": "2022-11-14T21:13:12.030613Z",
 			"refund_datetime": "2022-11-14T21:13:12.030613Z",
 			"is_committed": true
@@ -463,4 +479,3 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 	"previous": null
 }
 ```
-
