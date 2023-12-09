@@ -56,7 +56,7 @@ paths:
                   payment_url:
                     type: string
                     format: url
-                    example: "https://cafebazaar.ir/user/payment?token=0123456789"
+                    example: "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -82,7 +82,7 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ```json
 {
 	"checkout_token": "0123456789",
-	"payment_url": "https://cafebazaar.ir/user/payment?token=0123456789"
+	"payment_url": "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
 }
 ```
 
@@ -154,10 +154,10 @@ arguments:
 example:
 
 Init-checkout’s payment_url:
-https://cafebazaar.ir/user/payment?token=my_checkout_token
+https://cafebazaar.ir/bazaar-pay/payment?token=my_checkout_token
 
 Redirect user to:
-https://cafebazaar.ir/user/payment?token=my_checkout_token&redirect_url=https://your-web-site.omg/status&phone=09194950906
+https://cafebazaar.ir/bazaar-pay/payment?token=my_checkout_token&redirect_url=https://your-web-site.omg/status&phone=09194950906
 
 ## تایید خرید
 
