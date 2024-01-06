@@ -6,34 +6,30 @@
 استفاده گردد. لطفاً توجه کنید که این توکن دسترسی باید به ازای هر فرایند پرداخت مجدداً ساخته شود.
 
 در این حالت، کاربر نیازی به لاگین مجزا در بازارپی ندارد. sdkهای کلاینت
-که از این قابلیت احراز هویت اتوماتیک پشتیبانی می‌کنند (sdk اندروید از [نسخه‌ی 5.2.0 به بعد](https://github.com/cafebazaar/BazaarPay/releases/tag/5.2.0))،
+که از این قابلیت احراز هویت اتوماتیک پشتیبانی می‌کنند (sdk اندروید
+از [نسخه‌ی 5.2.0 به بعد](https://github.com/cafebazaar/BazaarPay/releases/tag/5.2.0))،
 در صورتی که کاربر از قبل در بازارپی لاگین نباشد، از توکن دسترسی که
 توسط مرچنت فراهم شده برای ادامه‌ی عملیات کاربر استفاده می‌کنند.
 
 نمودار دنباله‌ی این فرایند را در زیر مشاهده می‌کنید:
+
 ```mermaid
 sequenceDiagram
     participant کاربر
     participant مرچنت
     participant بازارپی
     participant web / android sdk
-
     مرچنت ->> بازارپی: ارسال شماره همراه کاربر
     بازارپی -->> مرچنت: دریافت توکن دسترسی
     Note over بازارپی, مرچنت: Create User Access Token
-
     مرچنت ->> بازارپی: درخواست ساخت توکن چک‌اوت
     بازارپی -->> مرچنت: ارسال توکن چک‌اوت (و آدرس پرداخت)
     Note over بازارپی, مرچنت: Initiate Checkout
-
     مرچنت ->> web / android sdk: انتقال توکن دسترسی و توکن چک‌اوت به اس‌دی‌کی و شروع فلوی پرداخت
-
     web / android sdk ->> کاربر: بازکردن پاپ‌آپ/انتقال کاربر به آدرس پرداخت
     کاربر ->> بازارپی: انجام عملیات موفق پرداخت
     بازارپی ->> مرچنت: انتقال کاربر به مرچنت
-
     مرچنت ->> کاربر: ارایه محصول به کاربر
-
     مرچنت ->> بازارپی: تایید عملیات خرید
     Note over مرچنت, بازارپی: Commit
 ```
@@ -43,6 +39,7 @@ sequenceDiagram
 پذیرنده بعد از احراز هویت کاربر در سایت خود، می‌تواند از طریق
 اندپوینت `create-user-access-token`، برای شماره همراه کاربر توکن دسترسی دریافت نماید.
 این توکن دسترسی فقط می‌تواند برای یکی از سه محدوده (scope) زیر مورد استفاده قرار گیرد:
+
 1. خرید (purchase): برای خرید از طریق کیف پول، درگاه بانکی، و یا دایرکت‌دبیت
 1. افزایش موجودی (increase_balance): برای فرآیند افزایش موجودی مستقیم کیف پول
 1. پرداخت خودکار (direct_pay): برای فرآیند پرداخت خودکار
@@ -54,10 +51,11 @@ sequenceDiagram
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Create User Access Token API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /merchant/create-user-access-token/:
     post:
@@ -96,27 +94,23 @@ paths:
                     type: string
                     example: "A1023e71738b4c1045529003314f429f0.81f023z="
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
         '403':
           description: Permission Denied
           content:
             application/json:
               schema:
-              - $ref: '#/components/schemas/PermissionDenied'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
                 oneOf:
-                - $ref: './fa/shared_components/error-responses.md#/responses/400/content/application/json/schema'
-                - $ref: '#/components/schemas/BadRequest'
+                  - $ref: './fa/shared-components/error-responses.md#/responses/403/content/application/json/schema'
+                  - $ref: '#/components/schemas/AutoLoginResponse'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -162,10 +156,11 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Get User Info API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /user/info/:
     get:
@@ -181,15 +176,17 @@ paths:
                     type: string
                     example: "989123456789"
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
         '400':
-          $ref: './fa/shared_components/error-responses.md#/responses/400'
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -204,7 +201,7 @@ curl 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/user/info/' \
 
 ```json
 {
-    "phone_number": "989123456789"
+	"phone_number": "989123456789"
 }
 ```
 
@@ -213,37 +210,18 @@ curl 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/user/info/' \
 ```yaml
 components:
   schemas:
-    PermissionDenied:
+    AutoLoginResponse:
       type: object
       properties:
         detail:
-        - type: string
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: string
         examples:
-          permission_error:
+          permission_denied:
             value:
               description: وقتی پذیرنده دسترسی لازم برای ساختن توکن (برای خرید یا افزایش موجودی یا پرداخت خودکار) را ندارد.
               detail: "شما دسترسی لاگین اتوماتیک برای خرید را ندارید."
-    BadRequest:
-      type: object
-      properties:
-        oneOf:
-          detail:
-            - type: string
-          scope:
-            - type: list
-              items:
-                - type: string
-          user_phone_number:
-            - type: list
-              items:
-                - type: string
-        examples:
-          invalid_scope:
-            value:
-              description: مقدار scope ارسال‌شده معتبر نیست
-              scope: ["این اسکوپ انتخاب معتبری نیست."]
-          invalid_user_phone_number:
-            value:
-              description: شماره تماس معتبر نیست.
-              user_phone_number: ["شماره تماس معتبر نیست"]
 ```

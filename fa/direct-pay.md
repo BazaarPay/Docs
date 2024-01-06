@@ -15,10 +15,11 @@
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Initialize Directpay Contract API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /direct-pay/contract/init/:
     post:
@@ -81,15 +82,17 @@ paths:
                     type: string
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
         '400':
-          $ref: './fa/shared_components/error-responses.md#/responses/400'
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 در صورت استفاده از changeable_limits،‌ جهت تعیین/تغییر مقادیر قابل انتخاب توسط کاربر برای amount_limit و period به تیم‌بازارپی اطلاع دهید.
@@ -128,10 +131,11 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay Web
+  title: Open Directpay Webpage
   version: 1.0.0
 servers:
   - url: 'https://{base_url}{base_path}'
+    description: BazaarPay Web
 paths:
   /contract/direct-pay:
     summary: finalize-contract-without-sdk
@@ -246,10 +250,11 @@ interface CallbackUrl {
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Trace Directpay Contract API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /direct-pay/contract/trace/:
     get:
@@ -305,15 +310,17 @@ paths:
                     example: 2024-06-25T09:28:34.668933Z
                     description: تاریخ و زمان پایان دوره فعلی (زمان ریست شدن محدودیت میزان تراکنش)
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
         '400':
-          $ref: './fa/shared_components/error-responses.md#/responses/400'
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -346,10 +353,11 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Cancel Directpay Contract API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /direct-pay/contract/cancel/:
     post:
@@ -369,21 +377,23 @@ paths:
         '204':
           description: Success
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: './fa/shared_components/error-responses.md#/responses/400/content/application/json/schema'
+                  - $ref: './fa/shared-components/error-responses.md#/responses/400/content/application/json/schema'
                   - $ref: '#/components/schemas/CancelResponse'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -406,10 +416,11 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Pay With Directpay Contract API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /direct-pay/:
     post:
@@ -434,21 +445,23 @@ paths:
         '204':
           description: Success
         '401':
-          $ref: './fa/shared_components/error-responses.md#/responses/401'
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: './fa/shared_components/error-responses.md#/responses/400/content/application/json/schema'
+                  - $ref: './fa/shared-components/error-responses.md#/responses/400/content/application/json/schema'
                   - $ref: '#/components/schemas/PayResponse'
         '503':
-          $ref: './fa/shared_components/error-responses.md#/responses/503'
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 ### نمونه cURL
@@ -548,5 +561,5 @@ components:
           bad_contract_token:
             value:
               description: توکن قرارداد ارسال شده قابلیت کنسل شدن را ندارد.(قرارداد فعال نشده باشد یا معتبر نباشد)
-              detail: "توکن قرارداد صحیح نیست." 
+              detail: "توکن قرارداد صحیح نیست."
 ```

@@ -7,30 +7,53 @@
 این قابلیت نیازمند دارا بودن یک دسترسی ویژه می‌باشد، در صورت نیاز، برای دریافت آن با پشتیبانی بازارپی در ارتباط باشید.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: Get User Balance API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
-  { base_url }/get-balance/
+  /get-balance/:
     get:
-      security: ApiKeyAuth
-      summary: get-user-balance
+      summary: user-balance
+      security:
+        - ApiKeyAuth: [ ]
       parameters:
         - name: user_phone_number
           in: query
-          description: شماره تماس کاربر
           schema:
             type: string
             example: "09120000000"
           required: true
+          description: شماره موبایل کاربر
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
-                balance:
-                  type: int
-                  example: 50000
-                balance_string:
-                  type: string
-                  example: "۵۰۰۰ تومان"
+                type: object
+                properties:
+                  balance:
+                    type: number
+                    example: 79719
+                  balance_string:
+                    type: number
+                    example: "۷,۹۷۱ تومان"
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: "./fa/shared-components/security.md#/securitySchemes/ApiKeyAuth";
 ```
 
 example:
@@ -45,18 +68,23 @@ curl --location 'pardakht.cafebazaar.ir/pardakht/badje/v1/get-balance/?user_phon
 برای افزایش موجودی کیف پول بازارپی، کاربر را به آدرس زیر هدایت کنید.
 
 ```yaml
+openapi: 3.1.0
+info:
+  title: Open Increase Balance Webpage
+  version: 1.0.0
 servers:
-  - url: https://cafebazaar.ir/bazaar-pay/
+  - url: 'https://{base_url}{base_path}'
+    description: BazaarPay Web
 paths:
   /increase-balance:
-    get:
-      summary: increase-balance
-      parameters:
-        - name: redirect_url
-          in: query
-          description: کاربر به آدرس مورد نظر باید منتقل شود، همچنین آدرس باید به صورت encodeURIComponent انکد شود
-          schema:
-            type: string
-            example: "https://cafebazaar.ir/bazaar-pay/increase-balance?redirect_url=https://bazaar-pay.ir"
+    summary: increase-balance
+    description: کاربر به صفحه‌ی افزایش موجودی منتقل می‌شود
+    parameters:
+      - name: redirect_url
+        in: query
+        required: true
+        schema:
+          type: string
+          example: "https://cafebazaar.ir/bazaar-pay/increase-balance?redirect_url=https://bazaar-pay.ir"
+        description: آدرس باید به صورت encodeURIComponent انکد شود
 ```
-
