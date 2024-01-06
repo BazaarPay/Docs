@@ -10,7 +10,18 @@ responses:
           properties:
             detail:
               type: string
-              example: 'اطلاعات برای اعتبارسنجی ارسال نشده است.'
+              example: "اطلاعات برای اعتبارسنجی ارسال نشده است."
+  '403':
+    description: Permission Denied
+    content:
+      application/json:
+        schema:
+          type: object
+          description: دسترسی لازم برای دسترسی به اندپوینت مورد نظر را نداشته باشید یا حساب کاربری شما مسدود شده باشد
+          properties:
+            detail:
+              type: string
+              example: "شما دسترسی لازم را ندارید."
   '400':
     description: Bad Request
     content:

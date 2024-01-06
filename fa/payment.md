@@ -5,17 +5,18 @@
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Initialize Checkout Token API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /checkout/init/:
     post:
       summary: init-checkout
       security:
-        - { }
-        - ApiKeyAuth: [ ]
+        - ApiKeyAuth: []
+        - {}
       requestBody:
         content:
           application/json:
@@ -57,10 +58,18 @@ paths:
                     type: string
                     format: url
                     example: "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
@@ -168,17 +177,18 @@ https://cafebazaar.ir/bazaar-pay/payment?token=my_checkout_token&redirect_url=ht
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Commit checkout Token API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /commit/:
     post:
       summary: commit
       security:
-        - { }
-        - ApiKeyAuth: [ ]
+        - ApiKeyAuth: []
+        - {}
       requestBody:
         content:
           application/json:
@@ -191,10 +201,18 @@ paths:
       responses:
         '204':
           description: checkout committed successfully
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref:  './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
@@ -215,16 +233,17 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Refund Checkout Token API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /refund/:
     post:
       summary: refund
       security:
-        - ApiKeyAuth: [ ]
+        - ApiKeyAuth: []
       requestBody:
         content:
           application/json:
@@ -241,10 +260,18 @@ paths:
       responses:
         '204':
           description: refunded successfully
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 * تنها نسبت به توکن چک‌اوت، idempotent است.
@@ -267,14 +294,17 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Trace Checkout Token API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /trace/:
     post:
       summary: trace
+      security:
+        - {}
       requestBody:
         content:
           application/json:
@@ -304,10 +334,10 @@ paths:
                       - refunded                      # پرداخت کاربر پس از کامیت شدن به کیف پولش بازگشته است. ریفاند حتما توسط مرچنت انجام شده است.
                       - timed_out                     # زمان استفاده از توکن به اتمام رسیده و توکن منقضی شده است. 
                     example: "paid_committed"
-components:
-  securitySchemes:
-    ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 ```
 
 ### نمونه cURL
@@ -333,10 +363,11 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 ```yaml
 openapi: 3.1.0
 info:
-  title: BazaarPay API
+  title: Get Checkout Statuses API
   version: 1.0.0
 servers:
-  - url: 'https://{base_url}{base_path}'
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
 paths:
   /get-checkouts-status/:
     post:
@@ -414,10 +445,18 @@ paths:
                     type: string
                     format: url
                     description: url to request for previous page of checkouts
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref: './fa/shared_components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 * فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
