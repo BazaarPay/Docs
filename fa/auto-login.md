@@ -146,7 +146,7 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 
 ### احراز هویت با SDK وب
 
-این روش در حال پیاده‌سازی می‌باشد و بزودی در دسترس قرار می‌گیرد.
+این روش در آینده پیاده‌سازی خواهد شد.
 
 ### احراز هویت بدون SDK وب
 
