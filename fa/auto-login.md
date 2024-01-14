@@ -156,7 +156,33 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 #### فراخوانی مستقیم وب‌سرویس
 
 در هر انتری پوینت از وب‌سرویس با پاس دادن کوئری پارام `auto_login_token`، وب‌سرویس روش احراز هویت را اتولاگین تشخیص داده
-و تا انتهای فرآیند مورد نظر،ِ کاربر با آن توکن احراز هویت خواهد شد. این نکته را در نظر بگیرید که مقدار این کوئری پارام را باید توسط `access_token` که در اندپوینت `create-user-access-token` برگرداننده می‌شود مقداردهی نمایید. 
+و تا انتهای فرآیند مورد نظر،ِ کاربر با آن توکن احراز هویت خواهد شد. این نکته را در نظر بگیرید که مقدار این کوئری پارام
+را باید توسط `access_token` که در اندپوینت `create-user-access-token` برگرداننده می‌شود مقداردهی نمایید.
+
+### نمونه پیاده‌سازی#
+
+##### کوئری پارامز برای استفاده از سرویس پرداخت بازارپی
+
+```yaml
+queryParams:
+  # AutoLogin Query Param
+  - name: auto_login_token
+    type: string
+    description: User's Auto Login access token
+    example: eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
+```
+
+#### نمونه آدرس پرداخت بدون احراز هویت خودکار#
+
+```
+https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
+```
+
+##### نمونه آدرس پرداخت با احراز هویت خودکار
+
+```
+https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_token}
+```
 
 ## دریافت شماره همراه کاربر از روی توکن دسترسی
 
