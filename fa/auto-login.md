@@ -159,7 +159,7 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 و تا انتهای فرآیند مورد نظر،ِ کاربر با آن توکن احراز هویت خواهد شد. این نکته را در نظر بگیرید که مقدار این کوئری پارام
 را باید توسط `access_token` که در اندپوینت `create-user-access-token` برگرداننده می‌شود مقداردهی نمایید.
 
-### نمونه پیاده‌سازی#
+#### نمونه‌ی پیاده‌سازی
 
 ```yaml
 queryParams:
