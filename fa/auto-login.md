@@ -182,6 +182,12 @@ https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merch
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_token}
 ```
 
+#### نمونه استفاده از احراز هویت خودکار
+
+```
+https://cafebazaar.ir/bazaar-pay/payment?token=2220203584&redirect_url=https://bazaar-pay.ir&auto_login_token=eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
+```
+
 ## دریافت شماره همراه کاربر از روی توکن دسترسی
 
 کلاینت و sdkها می‌توانند برای به‌دست‌آوردن شماره‌ی همراه کاربر از روی توکن دسترسی
