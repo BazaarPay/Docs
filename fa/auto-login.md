@@ -161,8 +161,6 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 
 ### نمونه پیاده‌سازی#
 
-##### کوئری پارامز برای استفاده از سرویس پرداخت بازارپی
-
 ```yaml
 queryParams:
   # AutoLogin Query Param
@@ -172,13 +170,13 @@ queryParams:
     example: eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
 ```
 
-#### نمونه آدرس پرداخت بدون احراز هویت خودکار#
+### نمونه آدرس پرداخت بدون احراز هویت خودکار#
 
 ```
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
 ```
 
-##### نمونه آدرس پرداخت با احراز هویت خودکار
+#### نمونه آدرس پرداخت با احراز هویت خودکار
 
 ```
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_token}
