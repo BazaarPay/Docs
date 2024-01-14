@@ -168,7 +168,7 @@ QueryParams:
 
 #### نمونه استفاده از آدرس پرداخت
 
-این آدرس توسط درخواست `/checkout/init/` برگردانندع می‌شود.
+این آدرس توسط درخواست `/checkout/init/` برگرداننده می‌شود.
 
 ```
 https://{base_url}{base_path}/payment?token=checkout_token
@@ -180,7 +180,7 @@ https://{base_url}{base_path}/payment?token=checkout_token
 https://{base_url}{base_path}/payment?token=checkout_token&phone=user_phone_number&redirect_url=merchant_redirect_url
 ```
 
-که مثال نمونه‌ی نهایی آن مانند زیر می‌شود:
+مثال نمونه‌ی نهایی آن مانند زیر می‌شود:
 
 ```
 https://cafebazaar.ir/bazaar-pay/payment?token=3258455376&phone=09123456789&redirect_url=https://bazaar-pay.ir
