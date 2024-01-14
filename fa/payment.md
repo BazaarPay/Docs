@@ -159,7 +159,7 @@ QueryParams:
     type: string
     format: encodedURL    # must be encoded by encodeURIComponent
     required: true
-    description: آدرس بازگشتی به مرچنت که کاربر در صورت موفق/ناموفق بودن به این آدرس بازگشت داده می‌شود، حتما آدرس بازگشتی خود را اندکد کنید.
+    description: آدرس بازگشتی به مرچنت که کاربر در صورت موفق/ناموفق بودن به این آدرس بازگشت داده می‌شود، حتما آدرس بازگشتی خود را اندکد کنید
   - name: phone
     type: string
     required: false
