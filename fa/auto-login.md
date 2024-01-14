@@ -170,7 +170,7 @@ queryParams:
     example: eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
 ```
 
-### نمونه آدرس پرداخت بدون احراز هویت خودکار#
+#### نمونه آدرس پرداخت بدون احراز هویت خودکار
 
 ```
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
