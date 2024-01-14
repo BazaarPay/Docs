@@ -46,7 +46,7 @@ sequenceDiagram
 
 در صورتی که از توکن ایجادشده در محدوده‌ی دیگری استفاده کنید با خطای ۴۰۳ مواجه خواهید شد.
 
-### نمونه
+### نمونه درخواست
 
 ```yaml
 openapi: 3.1.0
@@ -137,21 +137,63 @@ curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/c
 باید فرایند پرداخت را بدون توکن دسترسی اتوماتیک ادامه دهد.
 این اتفاق ممکن است به خاطر غیرفعال‌شدن موقتی قابلیت احراز هویت اتوماتیک به دلایل فنی رخ بدهد.
 
-## ارسال توکن دسترسی به sdk اندروید
+## احراز هویت خودکار در پلتفرم اندروید
 
-برای دیدن نحوه‌ی احراز هویت اتوماتیک در sdk اندروید،
+برای دیدن نحوه‌ی احراز هویت اتوماتیک در SDK اندروید،
 به [مستندات مربوط به sdk](https://github.com/cafebazaar/BazaarPay#2-launch-payment) مراجعه کنید.
 
-## ارسال توکن دسترسی به sdk وب
+## احراز هویت خودکار در پلتفرم وب
 
-مستندات مربوط به احراز هویت اتوماتیک در sdk وب در آینده نزدیک اعلام خواهد شد.
+### احراز هویت با SDK وب
+
+این روش در آینده پیاده‌سازی خواهد شد.
+
+### احراز هویت بدون SDK وب
+
+این سرویس با استفاده از کوئری پارام، توکن احراز هویت کاربر را دریافت کرده و فرآیندهای مورد نظر را با استفاده از توکن
+احراز هویت شده، انجام می‌دهد.
+
+#### فراخوانی مستقیم وب‌سرویس
+
+در هر انتری پوینت از وب‌سرویس با پاس دادن کوئری پارام `auto_login_token`، وب‌سرویس روش احراز هویت را اتولاگین تشخیص داده
+و تا انتهای فرآیند مورد نظر،ِ کاربر با آن توکن احراز هویت خواهد شد. این نکته را در نظر بگیرید که مقدار این کوئری پارام
+را باید توسط `access_token` که در اندپوینت `create-user-access-token` برگرداننده می‌شود مقداردهی نمایید.
+
+#### ساختار کوئری پارام
+
+```yaml
+queryParams:
+  # AutoLogin Query Param
+  - name: auto_login_token
+    type: string
+    description: User's Auto Login access token
+    example: eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
+```
+
+#### نمونه آدرس پرداخت بدون احراز هویت خودکار
+
+```
+https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
+```
+
+#### نمونه آدرس پرداخت با احراز هویت خودکار
+
+```
+https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_token}
+```
+
+#### نمونه استفاده از احراز هویت خودکار
+
+```
+https://cafebazaar.ir/bazaar-pay/payment?token=2220203584&redirect_url=https://bazaar-pay.ir&auto_login_token=eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
+```
 
 ## دریافت شماره همراه کاربر از روی توکن دسترسی
 
 کلاینت و sdkها می‌توانند برای به‌دست‌آوردن شماره‌ی همراه کاربر از روی توکن دسترسی
 و نمایش شماره‌ی همراه در UI، از اندپوینت `user/info/` استفاده کنند.
 
-### نمونه
+### نمونه درخواست
 
 ```yaml
 openapi: 3.1.0

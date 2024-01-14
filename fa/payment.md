@@ -15,8 +15,8 @@ paths:
     post:
       summary: init-checkout
       security:
-        - ApiKeyAuth: []
-        - {}
+        - ApiKeyAuth: [ ]
+        - { }
       requestBody:
         content:
           application/json:
@@ -147,26 +147,44 @@ arguments:
 پرداختش به صفحه‌ی درخواست شده ریدایرکت می‌شود.
 
 ۱. پس از دریافت payment_url در پاسخ فراخوانی init-checkout، باید کاربر را به آن یوآرال هدایت کنید. همچنین می‌توانید
-کوئری پارامترهای توضیح داده شده در جدول زیر را به payment_url اضافه کنید:
+کوئری پارام‌های توضیح داده شده در جدول زیر را به payment_url اضافه کنید:
 
 ```yaml
-arguments:
+QueryParams:
+  - name: token
+    type: string
+    required: true
+    description: که در خروجی این اندپوینت قرار دارد استفاده کنید `payment_url` برگرداننده می‌شود، شما می‌توانید این مقدار را در کوئری پارام قرار دهید یا برای سهولت کار تنها از  `/checkout/init/`  توکن مورد استفاده برای فرآیند پرداخت است، این مقدار در
   - name: redirect_url
     type: string
-    format: url    # encoded by encodeURIComponent
-    description: user will be redirected to this address after process
+    format: encodedURL    # must be encoded by encodeURIComponent
+    required: true
+    description: آدرس بازگشتی به مرچنت که کاربر در صورت موفق/ناموفق بودن به این آدرس بازگشت داده می‌شود، حتما آدرس بازگشتی خود را اندکد کنید
   - name: phone
     type: string
-    description: phone number suggested to user for login in bazaar-pay
+    required: false
+    description: شماره تماس کاربر که برای سرعت بخشیدن به فرآیند لاگین به صورت خودکار پر می‌شود
 ```
 
-example:
+#### نمونه استفاده از آدرس پرداخت
 
-Init-checkout’s payment_url:
-https://cafebazaar.ir/bazaar-pay/payment?token=my_checkout_token
+این آدرس توسط درخواست `/checkout/init/` برگرداننده می‌شود.
 
-Redirect user to:
-https://cafebazaar.ir/bazaar-pay/payment?token=my_checkout_token&redirect_url=https://your-web-site.omg/status&phone=09194950906
+```
+https://{base_url}{base_path}/payment?token=checkout_token
+```
+
+در صورتی که از کوئری‌پارام‌های فراهم شده استفاده کنید، نمونه آدرس مانند زیر می‌شود:
+
+```
+https://{base_url}{base_path}/payment?token=checkout_token&phone=user_phone_number&redirect_url=merchant_redirect_url
+```
+
+مثال نمونه‌ی نهایی آن مانند زیر می‌شود:
+
+```
+https://cafebazaar.ir/bazaar-pay/payment?token=3258455376&phone=09123456789&redirect_url=https://bazaar-pay.ir
+```
 
 ## تایید خرید
 
@@ -187,8 +205,8 @@ paths:
     post:
       summary: commit
       security:
-        - ApiKeyAuth: []
-        - {}
+        - ApiKeyAuth: [ ]
+        - { }
       requestBody:
         content:
           application/json:
@@ -212,7 +230,7 @@ paths:
 components:
   securitySchemes:
     ApiKeyAuth:
-      $ref:  './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
 در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
@@ -243,7 +261,7 @@ paths:
     post:
       summary: refund
       security:
-        - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       requestBody:
         content:
           application/json:
@@ -304,7 +322,7 @@ paths:
     post:
       summary: trace
       security:
-        - {}
+        - { }
       requestBody:
         content:
           application/json:
@@ -462,7 +480,8 @@ components:
 * فاصله‌ی بین این دو روز نباید بیشتر از ۳۱ روز باشه.
 * اگر مقدار filter_date_by برابر refund_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
   refund_datetime باشند. پس در نتیجه فقط checkout هایی که ریفاند شده‌اند در خروجی نمایش داده می‌شوند.
-* اگر مقدار filter_date_by برابر payment_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای فیلد
+* اگر مقدار filter_date_by برابر payment_date باشد، فقط checkout هایی در خروجی نمایش داده میشوند که دارای مقدار برای
+  فیلد
   payment_datetime باشند. پس در نتیجه فقط checkout هایی که پرداخت شده‌اند در خروجی نمایش داده می‌شوند.
 
 ### نمونه cURL
