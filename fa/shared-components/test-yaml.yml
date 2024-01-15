@@ -4,7 +4,7 @@ servers:
     variables:
       base_url:
         default: 'pardakht.cafebazaar.ir'
-        description: آدرس پایه اندپوینت‌های بازارپی
+        description: <p dir="rtl">آدرس پایه اندپوینت‌های بازارپی</p>
       base_path:
         default: '/pardakht/badje/v1'
         description: مسیر پایه اندپوینت‌های بازارپی نسخه ۱
