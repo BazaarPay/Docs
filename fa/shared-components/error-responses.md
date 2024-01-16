@@ -7,54 +7,69 @@ responses:
         schema:
           type: object
           description: هدر احراز هویت نامعتبر یا ارسال نشده باشد
-          properties:
-            detail:
-              type: string
-              example: "اطلاعات برای اعتبارسنجی ارسال نشده است."
+          oneOf:
+            - "#/components/schemas/ErrorResponseV1"
+            - "#/components/schemas/ErrorResponseV2"
+        examples:
+          response_v1:
+            description: "پاسخ در v1"
+            value:
+              detail: "اطلاعات برای اعتبارسنجی ارسال نشده است."
+          response_v2:
+            description: "پاسخ در v2"
+            value:
+              detail: "اطلاعات برای اعتبارسنجی ارسال نشده است."
+              code: "not_authenticated"
+
+
   '403':
     description: Permission Denied
     content:
       application/json:
         schema:
-          type: object
           description: دسترسی لازم برای دسترسی به اندپوینت مورد نظر را نداشته باشید یا حساب کاربری شما مسدود شده باشد
-          properties:
-            detail:
-              type: string
-              example: "شما دسترسی لازم را ندارید."
+          oneOf:
+            - "#/components/schemas/ErrorResponseV1"
+            - "#/components/schemas/ErrorResponseV2"
+        examples:
+          response_v1:
+            description: "پاسخ در v1"
+            value:
+              detail: "شما دسترسی لازم را ندارید."
+          response_v2:
+            description: "پاسخ در v2"
+            value:
+              detail: "شما دسترسی لازم را ندارید."
+              code: "permission_denied"
+
   '400':
     description: Bad Request
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            oneOf:
-              anyOf:
-                field_with_problem:
-                  type: array
-                  description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
-                  items:
-                    type: string
-              detail:
-                oneOf:
-                  - type: array
-                    items:
-                      type: string
-                  - type: string
-            examples:
-              null_in_request_data:
-                value:
-                  description: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
-                  json_object_name: [ "این فیلد نمی‌تواند خالی باشد." ]
-              invalid_request_schema:
-                value:
-                  description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
-                  detail: "JSON parse error - Extra data: line 4 column 2 (char 57)"
-              invalid_request_data:
-                value:
-                  description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
-                  json_object_name: [ "\"test\" یک انتخاب معتبر نیست." ]
+          oneOf:
+            - "#/components/schemas/BadRequestResponseV1"
+            - "#/components/schemas/BadRequestResponseV2"
+  '500':
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          description: خطای داخلی رخ داده
+          oneOf:
+            - "#/components/schemas/ErrorResponseV1"
+            - "#/components/schemas/ErrorResponseV2"
+        examples:
+          response_v1:
+            description: "پاسخ در v1"
+            value:
+              detail: "خطایی سمت سرور رخ داده‌است"
+          response_v2:
+            description: "پاسخ در v2"
+            value:
+              detail: "خطایی سمت سرور رخ داده‌است"
+              code: "internal_server_error"
+
   '503':
     description: Service Temporarily Unavailable. This response is returned when the server is currently unable to handle the request due to temporary overloading or maintenance.
     content:
@@ -70,4 +85,83 @@ responses:
             <hr><center>nginx</center>
             </body>
             </html>
+
+components:
+  schemas:
+    ErrorResponseV1:
+      type: object
+      properties:
+        detail:
+          type: string
+
+    ErrorResponseV2:
+      type: object
+      properties:
+        detail:
+          type: string
+        code:
+          type: string
+
+    BadRequestResponseV1:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oneOf:
+                anyOf:
+                  field_with_problem:
+                    type: array
+                    description: فیلد دارای خطا، به صورت یک آبجکت در رسپانس مربوط به ریکوئست برگردانده می‌شود که نام این آیجکت متناسب با فیلد دارای مشکل تغییر می‌کند.
+                    items:
+                      type: string
+                detail:
+                  oneOf:
+                    - type: array
+                      items:
+                        type: string
+                    - type: string
+              examples:
+                null_in_request_data:
+                  value:
+                    description: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
+                    json_object_name: [ "این فیلد نمی‌تواند خالی باشد." ]
+                invalid_request_schema:
+                  value:
+                    description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
+                    detail: "JSON parse error - Extra data: line 4 column 2 (char 57)"
+                invalid_request_data:
+                  value:
+                    description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
+                    json_object_name: [ "\"test\" یک انتخاب معتبر نیست." ]
+
+    BadRequestResponseV2:
+      description: Bad Request in v2 APIs
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+                example: "invalid"
+              detail:
+                type: string
+                example: "درخواست نامعتبر است"
+              invalid_params:
+                type: array
+                description: لیست فیلدهای حاوی ارور
+                items:
+                  type: object
+                  properties:
+                    param:
+                      type: string
+                      example: "password"
+                    code:
+                      type: string
+                      example: "required"
+                    detail:
+                      type: string
+                      example: "این مقدار لازم است."
 ```
