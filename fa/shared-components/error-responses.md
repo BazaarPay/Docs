@@ -12,41 +12,40 @@ responses:
             - "#/components/schemas/ErrorResponseV2"
         examples:
           response_v1:
-            description: "پاسخ در v1"
+            summary: "پاسخ در v1"
             value:
               detail: "اطلاعات برای اعتبارسنجی ارسال نشده است."
           response_v2:
-            description: "پاسخ در v2"
+            summary: "پاسخ در v2"
             value:
               detail: "اطلاعات برای اعتبارسنجی ارسال نشده است."
               code: "not_authenticated"
-
-
   '403':
     description: Permission Denied
     content:
       application/json:
         schema:
+          type: object
           description: دسترسی لازم برای دسترسی به اندپوینت مورد نظر را نداشته باشید یا حساب کاربری شما مسدود شده باشد
           oneOf:
             - "#/components/schemas/ErrorResponseV1"
             - "#/components/schemas/ErrorResponseV2"
         examples:
           response_v1:
-            description: "پاسخ در v1"
+            summary: "پاسخ در v1"
             value:
               detail: "شما دسترسی لازم را ندارید."
           response_v2:
-            description: "پاسخ در v2"
+            summary: "پاسخ در v2"
             value:
               detail: "شما دسترسی لازم را ندارید."
               code: "permission_denied"
-
   '400':
     description: Bad Request
     content:
       application/json:
         schema:
+          type: object
           oneOf:
             - "#/components/schemas/BadRequestResponseV1"
             - "#/components/schemas/BadRequestResponseV2"
@@ -55,21 +54,21 @@ responses:
     content:
       application/json:
         schema:
+          type: object
           description: خطای داخلی رخ داده
           oneOf:
             - "#/components/schemas/ErrorResponseV1"
             - "#/components/schemas/ErrorResponseV2"
         examples:
           response_v1:
-            description: "پاسخ در v1"
+            summary: "پاسخ در v1"
             value:
               detail: "خطایی سمت سرور رخ داده‌است"
           response_v2:
-            description: "پاسخ در v2"
+            summary: "پاسخ در v2"
             value:
               detail: "خطایی سمت سرور رخ داده‌است"
               code: "internal_server_error"
-
   '503':
     description: Service Temporarily Unavailable. This response is returned when the server is currently unable to handle the request due to temporary overloading or maintenance.
     content:
@@ -85,29 +84,23 @@ responses:
             <hr><center>nginx</center>
             </body>
             </html>
-
 components:
   schemas:
     ErrorResponseV1:
-      type: object
       properties:
         detail:
           type: string
-
     ErrorResponseV2:
-      type: object
       properties:
         detail:
           type: string
         code:
           type: string
-
     BadRequestResponseV1:
       description: Bad Request
       content:
         application/json:
           schema:
-            type: object
             properties:
               oneOf:
                 anyOf:
@@ -124,24 +117,22 @@ components:
                     - type: string
               examples:
                 null_in_request_data:
+                  summary: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
                   value:
-                    description: یک فیلد اجباری در ریکوئست ارسال نشود یا null ارسال شود
                     json_object_name: [ "این فیلد نمی‌تواند خالی باشد." ]
                 invalid_request_schema:
+                  summary: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
                   value:
-                    description: اسکیما (ساختار) ارسال شده در بادی ریکوئست معتبر نباشد
                     detail: "JSON parse error - Extra data: line 4 column 2 (char 57)"
                 invalid_request_data:
+                  summary: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
                   value:
-                    description: مقدار یک فیلد معتبر نباشد (جزو مقادیر مجاز قابل انتخاب نباشد)
                     json_object_name: [ "\"test\" یک انتخاب معتبر نیست." ]
-
     BadRequestResponseV2:
       description: Bad Request in v2 APIs
       content:
         application/json:
           schema:
-            type: object
             properties:
               code:
                 type: string
