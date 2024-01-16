@@ -95,7 +95,8 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-در صورت استفاده از changeable_limits،‌ جهت تعیین/تغییر مقادیر قابل انتخاب توسط کاربر برای amount_limit و period به تیم‌بازارپی اطلاع دهید.
+در صورت استفاده از changeable_limits،‌ جهت تعیین/تغییر مقادیر قابل انتخاب توسط کاربر برای amount_limit و period به
+تیم‌بازارپی اطلاع دهید.
 
 ### نمونه cURL
 
@@ -124,7 +125,8 @@ curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1
 دریافتی از `init contract` را به همراه `redirect_url` به این آدرس پاس می‌دهید و کاربر پس از امضای قرارداد به کلاینت
 مرچنت
 ریدایرکت می‌شود.
-در فرآیند بستن قرارداد دایرکت‌پی، در صورتی که نوع قرارداد از جنس دایرکت‌دبیت باشد و کاربر قرارداد فعال دایرکت‌دبیت نداشته باشد، به صورت خودکار وارد فرآیند بستن قرارداد دایرکت‌دبیت هم می‌شود.
+در فرآیند بستن قرارداد دایرکت‌پی، در صورتی که نوع قرارداد از جنس دایرکت‌دبیت باشد و کاربر قرارداد فعال دایرکت‌دبیت
+نداشته باشد، به صورت خودکار وارد فرآیند بستن قرارداد دایرکت‌دبیت هم می‌شود.
 
 ### نمونه
 
@@ -342,11 +344,10 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 }
 ```
 
-
 ## لغو قرارداد دایرکت‌پی
 
 توسط این اندپوینت مرچنت می‌تواند قراردادهای فعال کاربر را لغو کند.
-درصورت مواجه با خطاهای دسته‌ي ۴۰۰ می‌توانید با فراخوانی اندپوینت trace از وضعیت فعلی قرارداد مطلع شوید. 
+درصورت مواجه با خطاهای دسته‌ي ۴۰۰ می‌توانید با فراخوانی اندپوینت trace از وضعیت فعلی قرارداد مطلع شوید.
 
 ### نمونه
 
@@ -403,7 +404,6 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 --header 'Authorization: Token {merchant_token}' 
 ```
 
-
 ## پرداخت با دایرکت‌پی
 
 نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
@@ -411,13 +411,17 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/con
 اندپوینت‌های Trace و Refund نیز
 استفاده کرد.
 
+شما می‌توانید از ورژن دوم پرداخت نیز استفاده کنید، در این ورژن ساختار نمایش خطا در رسپانس این ریکوئست بهبود یافته تا کار
+را برای استفاده مرچنت‌ها راحت‌تر نماید. علاوه بر آن مرچنت‌ها می‌توانند توسط مقداری که در جیسن آبجکت `code`، در رسپانس این
+ریکوئست، در صورت به خطا خوردن برگرداننده می‌شود، لاجیک مورد نظر خود را نوشته و از آن استفاده نمایند.
+
 ### نمونه درخواست
 
 ```yaml
 openapi: 3.1.0
 info:
   title: Pay With Directpay Contract API
-  version: 1.0.0
+  version: 1.0.0 and 2.0.0
 servers:
   - url: 'https://{base_url}{base_path_v1}'
     description: BazaarPay API v1
@@ -496,6 +500,7 @@ curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
   اتمیک فراخوانی گردد.
 
 ## نمونه خطاها
+
 ```yaml
 components:
   schemas:
@@ -510,52 +515,65 @@ components:
             - type: string
         examples:
           direct_pay_is_not_active:
+            summary: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
             value:
-              description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
               detail: [ "قرارداد کاربر فعال نیست." ]
           contract_pay_over_max:
+            summary: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
             value:
-              description: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
               detail: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
-          wallet_balance_insufficient:
-            description: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
-            detail: "موجودی حساب کافی نیست."
-          direct_debit_balance_insufficient:
-            description: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
-            detail: "موجودی کافی در حساب بانکی خود ندارید"
+          insufficient_wallet_balance:
+            summary: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
+            value:
+              detail: "موجودی حساب کافی نیست."
+          insufficient_direct_debit_balance:
+            summary: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
+            value:
+              detail: "موجودی کافی در حساب بانکی خود ندارید"
           direct_debit_less_than_allowed:
-            description: حداقل مقدار مجاز برای پرداخت با دایرکت دبیت رعایت نشود
-            detail: "حداقل مقدار تراکنش ۱۰۰۰۰ ریال است."
-          direct_debit_not_active:
-            description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر منقضی، لغو یا در حال پردازش باشد
-            detail: "شما سرویس پرداخت سریع خود را فعال نکرده‌اید."
+            summary: حداقل مقدار مجاز برای پرداخت با دایرکت دبیت رعایت نشود
+            value:
+              detail: "حداقل مقدار تراکنش ۱۰۰۰۰ ریال است."
+          direct_debit_is_not_active:
+            summary: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر منقضی، لغو یا در حال پردازش باشد
+            value:
+              detail: "شما سرویس پرداخت سریع خود را فعال نکرده‌اید."
           direct_debit_not_allowed:
-            description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که درگاه غیرفعال باشد یا به یک علت امکان استفاده از آن وجود نداشته باشد
-            detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
+            summary: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که درگاه غیرفعال باشد یا به یک علت امکان استفاده از آن وجود نداشته باشد
+            value:
+              detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
           checkout_token_expired:
-            description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
-            detail: "توکن پرداخت منقضی شده است، لطفاً فرآیند پرداخت را از اول آغاز کنید."
+            summary: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
+            value:
+              detail: "توکن پرداخت منقضی شده است، لطفاً فرآیند پرداخت را از اول آغاز کنید."
           direct_debit_card_expired:
-            description: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
-            detail: "کارت غیرفعال می‌باشد."
+            summary: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
+            value:
+              detail: "کارت غیرفعال می‌باشد."
           direct_debit_service_down:
-            description: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
-            detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
+            summary: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
+            value:
+              detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
           direct_debit_disabled_by_user:
-            description: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
-            detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
+            summary: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
+            value:
+              detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
           direct_debit_over_max_per_transaction:
-            description: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
-            detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
-          direct_debit_over_max_per_day:
-            description: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
-            detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
-          direct_debit_over_max_transactions_per_day:
-            description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
-            detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+            summary: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            value:
+              detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
+          direct_debit_over_max_amount_of_transaction_per_day:
+            summary: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            value:
+              detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+          direct_debit_over_max_count_of_transactions_per_day:
+            summary: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این تعداد برابر با ۱۰ عدد تراکنش می‌باشد)
+            value:
+              detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
           user_account_disabled:
-            description: حساب کاربر غیرفعال باشد.
-            detail: "حساب غیرفعال است."
+            summary: حساب کاربر غیرفعال باشد.
+            value:
+              detail: "حساب غیرفعال است."
     CancelResponse:
       type: object
       properties:
@@ -568,111 +586,129 @@ components:
                 - type: string
         examples:
           invalid_contract_token:
+            summary: توکن قرارداد ارسال شده توکن معتبری نیست
             value:
-              description: توکن قرارداد ارسال شده توکن معتبری نیست
-              contract_token: ["توکن قرارداد صحیح نیست."]
+              contract_token: [ "توکن قرارداد صحیح نیست." ]
           bad_contract_token:
+            summary: توکن قرارداد ارسال شده قابلیت کنسل شدن را ندارد.(قرارداد فعال نشده باشد یا معتبر نباشد)
             value:
-              description: توکن قرارداد ارسال شده قابلیت کنسل شدن را ندارد.(قرارداد فعال نشده باشد یا معتبر نباشد)
               detail: "توکن قرارداد صحیح نیست."
-
     PayResponseV2:
       type: object
       properties:
-        detail: 
+        detail:
           - type: string
         code:
           - type: string
         examples:
           user_account_disabled:
-            description: حساب کاربر غیرفعال باشد.
-            detail: "حساب غیرفعال است."
-            code: "account.disabled"     
-          wallet_balance_insufficient:
-            description: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
-            detail: "موجودی حساب کافی نیست."
-            code: "account.insufficient_balance"   
-          direct_debit_less_than_allowed:
-            description: حداقل مقدار مجاز برای پرداخت با دایرکت دبیت رعایت نشود
-            detail: "حداقل مقدار تراکنش ۱۰۰۰۰ ریال است."
-            code: "purchase.minimum_amount_violation"
-          checkout_token_expired:
-            description: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
-            detail: "توکن پرداخت منقضی شده است، لطفاً فرآیند پرداخت را از اول آغاز کنید."
-            code: "purchase.timeout"    
-          direct_pay_is_not_active:
+            summary: حساب کاربر غیرفعال باشد.
             value:
-              description: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
+              detail: "حساب غیرفعال است."
+              code: "account.disabled"
+          insufficient_wallet_balance:
+            summary: موجودی کیف پول کاربر هنگام پرداخت با دایرکت‌پی کافی نباشد
+            value:
+              detail: "موجودی حساب کافی نیست."
+              code: "account.insufficient_balance"
+          direct_debit_less_than_allowed:
+            summary: حداقل مقدار مجاز برای پرداخت با دایرکت دبیت رعایت نشود
+            value:
+              detail: "حداقل مقدار تراکنش ۱۰۰۰۰ ریال است."
+              code: "purchase.minimum_amount_violation"
+          checkout_token_expired:
+            summary: توکن پرداخت که از اندپوینت init checkout گرفته شده است، منقضی شده باشد
+            value:
+              detail: "توکن پرداخت منقضی شده است، لطفاً فرآیند پرداخت را از اول آغاز کنید."
+              code: "purchase.timeout"
+          direct_pay_is_not_active:
+            summary: قرارداد دایرک‌ت‌پی کاربر به هر علتی فعال نشده باشد
+            value:
               detail: "قرارداد کاربر فعال نیست."
               code: "direct_pay.inactive_contract"
           contract_pay_over_max:
+            summary: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
             value:
-              description: حداکثر سقف مجاز در بازه‌ی ثبت شده برای یک قرارداد (مانند یک قرارداد هفتگی با سقف ۱۰ هزارتومان)، رعایت نشده باشد
               detail: "با توجه به قرارداد شما، در بازه هفتگی نمی‌توانید از ویژگی پرداخت مستقیم بیش از ۱۰,۰۰۰ تومان استفاده کنید."
               code: "direct_pay.period_amount_limit_violation"
-          direct_debit_balance_insufficient:
-            description: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
-            detail: "موجودی کافی در حساب بانکی خود ندارید"
-            code: "direct_debit.insufficient_bank_account_balance"
-          direct_debit_not_active:
-            description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر منقضی، لغو یا در حال پردازش باشد
-            detail: "شما سرویس پرداخت سریع خود را فعال نکرده‌اید."
-            code: "direct_debit.inactive_contract"
+          insufficient_direct_debit_balance:
+            summary: موجودی کارت کاربر که دایرکت‌دبیت را با آن فعال کرده است هنگام پرداخت با دایرکت‌پی کافی نباشد
+            value:
+              detail: "موجودی کافی در حساب بانکی خود ندارید"
+              code: "direct_debit.insufficient_bank_account_balance"
+          direct_debit_is_not_active:
+            summary: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که قرارداد کاربر منقضی، لغو یا در حال پردازش باشد
+            value:
+              detail: "شما سرویس پرداخت سریع خود را فعال نکرده‌اید."
+              code: "direct_debit.inactive_contract"
           direct_debit_card_expired:
-            description: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
-            detail: "کارت غیرفعال می‌باشد."
-            code: "direct_debit.inactive_card"
+            summary: کارت کاربر به هر علتی (منقضی شده باشد یا توسط بانک) غیرفعال شده باشد
+            value:
+              detail: "کارت غیرفعال می‌باشد."
+              code: "direct_debit.inactive_card"
           direct_debit_disabled_by_user:
-            description: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
-            detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
-            code: "direct_debit.inactive_contract"
+            summary: قرارداد دایرکت‌دیبت توسط کاربر از سمت بانک لغو شده باشد
+            value:
+              detail: "شما قرارداد خود را از سمت بانک لغو کرده‌اید، لطفا قرارداد فعلی را لغو و مجددا قرارداد جدیدی ایجاد کنید."
+              code: "direct_debit.inactive_contract"
           direct_debit_over_max_per_transaction:
-            description: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
-            detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
-            code: "direct_debit.transaction_amount_limit_violation"
-          direct_debit_over_max_per_day:
-            description: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
-            detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
-            code: "direct_debit.daily_transaction_amount_limit_violation"
-          direct_debit_over_max_transactions_per_day:
-            description: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود
-            detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
-            code: "direct_debit.daily_transaction_count_limit_violation"
-          direct_debit_over_max_per_month:
-            description: اقدام به پرداخت بیشتر از مبلغ مجاز ماهانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
-            detail: "شما به سقف مقدار تراکنش ماهانه پرداخت مستقیم رسیده‌اید."
-            code: "direct_debit.monthly_transaction_amount_limit_violation"
-          direct_debit_over_max_transactions_per_month:
-            description: اقدام به پرداخت بیشتر از تعداد مجاز ماهانه ثبت شده در قرارداد دایرکت‌دبیت شود 
-            detail: "شما به سقف تعداد تراکنش ماهانه پرداخت مستقیم رسیده‌اید."
-            code: "direct_debit.monthly_transaction_count_limit_violation"
+            summary: اقدام به پرداخت بیشتر از مبلغ مجاز ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            value:
+              detail: "مبلغ تراکنش شما بیش از مقدار مجاز در سرویس پرداخت مستقیم است."
+              code: "direct_debit.transaction_amount_limit_violation"
+          direct_debit_over_max_amount_of_transaction_per_day:
+            summary: اقدام به پرداخت بیشتر از مبلغ مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            value:
+              detail: "شما به سقف مقدار تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+              code: "direct_debit.daily_transaction_amount_limit_violation"
+          direct_debit_over_max_count_of_transactions_per_day:
+            summary: اقدام به پرداخت بیشتر از تعداد مجاز روزانه ثبت شده در قرارداد دایرکت‌دبیت شود
+            value:
+              detail: "شما به سقف تعداد تراکنش روزانه پرداخت مستقیم رسیده‌اید."
+              code: "direct_debit.daily_transaction_count_limit_violation"
+          direct_debit_over_max_amount_of_transactions_per_month:
+            summary: اقدام به پرداخت بیشتر از مبلغ مجاز ماهانه ثبت شده در قرارداد دایرکت‌دبیت شود (این مبلغ ممکن هست وابسته به قرارداد دایرکت‌دبیت متفاوت باشد)
+            value:
+              detail: "شما به سقف مقدار تراکنش ماهانه پرداخت مستقیم رسیده‌اید."
+              code: "direct_debit.monthly_transaction_amount_limit_violation"
+          direct_debit_over_max_count_of_transactions_per_month:
+            summary: اقدام به پرداخت بیشتر از تعداد مجاز ماهانه ثبت شده در قرارداد دایرکت‌دبیت شود
+            value:
+              detail: "شما به سقف تعداد تراکنش ماهانه پرداخت مستقیم رسیده‌اید."
+              code: "direct_debit.monthly_transaction_count_limit_violation"
           direct_debit_withdrawal_not_allowed:
-            description: برداشت از حساب بانکی مجاز نیست
-            detail: "برداشت از سپرده مجاز نیست."
-            code: "direct_debit.withdrawal_not_allowed"
+            summary: برداشت از حساب بانکی مجاز نیست
+            value:
+              detail: "برداشت از سپرده مجاز نیست."
+              code: "direct_debit.withdrawal_not_allowed"
           invalid_national_id:
-            description: کد ملی مربوط به قرارداد، معتبر نیست
-            detail: "کد ملی نامعتبر است."
-            code: "direct_debit.invalid_national_id"
+            summary: کد ملی مربوط به قرارداد، معتبر نیست
+            value:
+              detail: "کد ملی نامعتبر است."
+              code: "direct_debit.invalid_national_id"
           blocked_bank_account:
-            description: حساب بانکی مسدود است
-            detail: "حساب بانکی شما مسدود شده است، لطفا برای رفع مشکل به بانک مراجعه کنید."
-            code: "direct_debit.blocked_bank_account"
+            summary: حساب بانکی مسدود است
+            value:
+              detail: "حساب بانکی شما مسدود شده است، لطفا برای رفع مشکل به بانک مراجعه کنید."
+              code: "direct_debit.blocked_bank_account"
           inactive_card:
-            description: کارت بانکی غیر فعال است
-            detail: "کارت غیرفعال است."
-            code: "direct_debit.inactive_card"
+            summary: کارت بانکی غیر فعال است
+            value:
+              detail: "کارت غیرفعال است."
+              code: "direct_debit.inactive_card"
           expired_card:
-            description: کارت بانکی منقضی شده‌است
-            detail: "کارت منقضی شده‌است"
-            code: "direct_debit.inactive_card"
+            summary: کارت بانکی منقضی شده‌است
+            value:
+              detail: "کارت منقضی شده‌است"
+              code: "direct_debit.inactive_card"
           direct_debit_service_down:
-            description: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
-            detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
-            code: "internal_server_error"
+            summary: سرویس دایرکت‌دبیت به هر علتی غیرفعال شده باشد
+            value:
+              detail: "امکان برقراری ارتباط با بانک وجود ندارد، لطفا از سایر روش‌های پرداخت استفاده کنید یا دقایقی دیگر مجددا تلاش کنید."
+              code: "internal_server_error"
           direct_debit_not_allowed:
-            description: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که درگاه غیرفعال باشد یا به یک علت امکان استفاده از آن وجود نداشته باشد
-            detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
-            code: "error"
-
+            summary: امکان پرداخت با دایرکت‌دبیت وجود نداشته باشد، مانند زمانی که درگاه غیرفعال باشد یا به یک علت امکان استفاده از آن وجود نداشته باشد
+            value:
+              detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
+              code: "error"
 ```
