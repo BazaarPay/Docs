@@ -25,6 +25,7 @@ responses:
     content:
       application/json:
         schema:
+          type: object
           description: دسترسی لازم برای دسترسی به اندپوینت مورد نظر را نداشته باشید یا حساب کاربری شما مسدود شده باشد
           oneOf:
             - "#/components/schemas/ErrorResponseV1"
@@ -44,6 +45,7 @@ responses:
     content:
       application/json:
         schema:
+          type: object
           oneOf:
             - "#/components/schemas/BadRequestResponseV1"
             - "#/components/schemas/BadRequestResponseV2"
@@ -52,6 +54,7 @@ responses:
     content:
       application/json:
         schema:
+          type: object
           description: خطای داخلی رخ داده
           oneOf:
             - "#/components/schemas/ErrorResponseV1"
@@ -84,12 +87,10 @@ responses:
 components:
   schemas:
     ErrorResponseV1:
-      type: object
       properties:
         detail:
           type: string
     ErrorResponseV2:
-      type: object
       properties:
         detail:
           type: string
@@ -100,7 +101,6 @@ components:
       content:
         application/json:
           schema:
-            type: object
             properties:
               oneOf:
                 anyOf:
@@ -133,7 +133,6 @@ components:
       content:
         application/json:
           schema:
-            type: object
             properties:
               code:
                 type: string
