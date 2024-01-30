@@ -101,7 +101,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/init/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/init/' \
 --header 'Authorization: Token {merchant_token}' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -328,7 +328,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/trace/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/trace/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
@@ -400,7 +400,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/contract/cancel/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/cancel/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
@@ -484,7 +484,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/direct-pay/' \
+curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/' \
 --header 'Authorization: Token {merchant_token}' \
 --data '{
     "contract_token": "7f9bf78c-a5e2-4126-9482-3s484b3706be",

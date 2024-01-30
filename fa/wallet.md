@@ -59,7 +59,7 @@ components:
 example:
 
 ```bash
-curl --location 'pardakht.cafebazaar.ir/pardakht/badje/v1/get-balance/?user_phone_number=09120000000' \
+curl --location 'api.bazaar-pay.ir/badje/v1/get-balance/?user_phone_number=09120000000' \
   --header 'Authorization: Token merchant_token'
 ```
 
