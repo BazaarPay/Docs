@@ -116,7 +116,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/merchant/create-user-access-token/' \
+curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-access-token/' \
 --header 'Content-Type: application/json; charset=utf-8' \
 --header 'Authorization: Token {merchant_token}' \
 --data-raw '{
@@ -234,7 +234,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/user/info/' \
+curl 'https://api.bazaar-pay.ir/badje/v1/user/info/' \
      --header 'Authorization: Bearer {user_access_token}' \
      --header 'Accept: application/json'
 ```

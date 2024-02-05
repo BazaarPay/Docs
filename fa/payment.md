@@ -77,7 +77,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/checkout/init/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init/' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "amount": 50000,
@@ -238,7 +238,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/commit/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/commit/' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "checkout_token": "some_token"
@@ -299,7 +299,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/refund/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/refund/' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Token some_auth_token \
 --data-raw '{
@@ -361,7 +361,7 @@ paths:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/trace/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/trace/' \
   --header 'Content-Type: application/json' \
   --data-raw '{
     "checkout_token": "some_token"
@@ -487,7 +487,7 @@ components:
 ### نمونه cURL
 
 ```curl
-curl --location --request POST 'https://pardakht.cafebazaar.ir/pardakht/badje/v1/get-checkouts-status/' \
+curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts-status/' \
 --header 'Authorization: Token {token}' --header 'Content-Type: application/json' \
 --data-raw '{
     "start_datetime": "2022-11-15T00:00", "end_datetime": "2022-11-15T14:00", "filter_date_by": "creation_date"
