@@ -70,6 +70,12 @@ paths:
                   default: false
                   description: |
                     مقادیر amount_limit و period در زمان تایید قرارداد توسط کاربر قابل تغییر باشند.
+                redirect_url:
+                  required: false
+                  type: url
+                  default: null
+                  description: |
+                   آدرسی که کاربر بعد از طی فرآیند به آن ریدایرکت شود. 
       responses:
         '200':
           description: Success
@@ -81,6 +87,10 @@ paths:
                   contract_token:
                     type: string
                     example: '7f9bf78c-a5e2-4126-9482-37484b3706be'
+                  redirect_url:
+                    type: string
+                    format: url
+                    example: "https://app.bazaar-pay.ir/contract/direct-pay?contract_token=7f9bf78c-a5e2-4126-9482-37484b3706be"
         '401':
           $ref: './fa/shared-components/error-responses.md#/responses/401'
         '403':
@@ -121,56 +131,41 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/co
 
 ## فعال‌سازی/رد قرارداد دایرکت‌پی بدون Web SDK
 
-برای امضای قرارداد توسط کاربر، می‌بایست کاربر را به صفحه‌ی امضای قرارداد ریدایرکت کنید. برای این کار توکن قرارداد
-دریافتی از `init contract` را به همراه `redirect_url` به این آدرس پاس می‌دهید و کاربر پس از امضای قرارداد به کلاینت
-مرچنت
-ریدایرکت می‌شود.
+برای امضای قرارداد توسط کاربر، می‌بایست کاربر را به `redirect_url` دریافتی از `init-contract` ریدایرکت کنید.  کاربر پس از امضای قرارداد به کلاینت
+مرچنت ریدایرکت می‌شود.
 در فرآیند بستن قرارداد دایرکت‌پی، در صورتی که نوع قرارداد از جنس دایرکت‌دبیت باشد و کاربر قرارداد فعال دایرکت‌دبیت
 نداشته باشد، به صورت خودکار وارد فرآیند بستن قرارداد دایرکت‌دبیت هم می‌شود.
+همچنین می‌توانید
+کوئری پارام‌های توضیح داده شده در زیر را به redirect_url اضافه کنید:
+
+(در صورتی که redirect_url را در ای‌پی‌آی init-contract ارسال کرده‌اید، نیازی به ارسال دوباره‌ی آن نیست.)
 
 ### نمونه
 
 ```yaml
-openapi: 3.1.0
-info:
-  title: Open Directpay Webpage
-  version: 1.0.0
-servers:
-  - url: 'https://{base_url}{base_path}'
-    description: BazaarPay Web
-paths:
-  /contract/direct-pay:
-    summary: finalize-contract-without-sdk
-    description: بعد از تایید/رد قرارداد، کاربر به آدرس بازگشت ارسال شده توسط مرچنت منتقل می‌شود
-    parameters:
-      - name: contract_token
-        in: query
-        required: true
-        schema:
-          type: string
-          example: 9bb790a3-44fd-486f-8ce8-38aa02cab069
-        description: توکن قرارداد گرفته شده از اندپوینت Init Contract
-      - name: redirect_url
-        in: query
-        required: true
-        description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود
-        schema:
-          type: string
-          example: https://example.com/bazaar-pay-return/direct-pay-contract
-      - name: phone
-        in: query
-        required: false
-        schema:
-          type: string
-          example: 09999999999
-        description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
-      - name: message
-        in: query
-        required: false
-        schema:
-          type: string
-          example: این یک پیام تست است
-        description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
+QueryParams:
+  - name: redirect_url
+    in: query
+    required: true
+    description: پس از عملیات فعال‌سازی، کاربر به این آدرس بازگشت داده می‌شود. حتما آدرس بازگشتی خود را اندکد کنید.
+    schema:
+      type: string
+      format: encodedURL    # must be encoded by encodeURIComponent
+      example: https://example.com/bazaar-pay-return/direct-pay-contract
+  - name: phone
+    in: query
+    required: false
+    schema:
+      type: string
+      example: 09999999999
+    description: در صورت نیاز به لاگین،‌شماره کاربر توسط این پارامتر در صفحه آن پر می‌شود. در صورتی که از قبل لاگین باشد از همان یوزر برای ایجاد قرارداد استفاده می‌شود.
+  - name: message
+    in: query
+    required: false
+    schema:
+      type: string
+      example: این یک پیام تست است
+    description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
 ### نمونه آدرس
