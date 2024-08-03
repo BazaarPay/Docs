@@ -1,16 +1,16 @@
-# دایرکت‌پی
+<h1 id="direct-pay">دایرکت‌پی</h1>
 
 این فرآیند برای پرداخت مستقیم از سمت پذیرنده (merchant) بدون دخالت کاربر در مواردی همچون تمدید خودکار اشتراک استفاده
 می‌شود.
 
-## ایجاد توکن قرارداد دایرکت‌پی
+<h2 id="init-contract">ایجاد توکن قرارداد دایرکت‌پی</h2>
 
 برای ساخت قرارداد دایرکت پی پذیرنده (merchant) باید محدودیت حداکثر میزان تراکنش و دوره‌ی زمانی این محدودیت را مشخص کند.
 
 به طور مثل اگر پذیرنده، قراردادی با محدودیت ۱ میلیون تومان به صورت هفتگی برای کاربر ایجاد کند، بعد از امضای این قرارداد
 توسط کاربر پذیرنده حداکثر هفته‌ای ۱ میلیون تومان می‌تواند پرداخت مستقیم را از حساب کاربر انجام دهد.
 
-### نمونه
+<h3 id="init-contract-sample">نمونه</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -108,7 +108,7 @@ components:
 در صورت استفاده از changeable_limits،‌ جهت تعیین/تغییر مقادیر قابل انتخاب توسط کاربر برای amount_limit و period به
 تیم‌بازارپی اطلاع دهید.
 
-### نمونه cURL
+<h3 id="init-contract-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/init/' \
@@ -121,7 +121,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/co
 }'
 ```
 
-### نمونه موفق پاسخ درخواست
+<h3 id="init-contract-sample-success-response">نمونه موفق پاسخ درخواست</h3>
 
 ```json
 {
@@ -129,7 +129,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/co
 }
 ```
 
-## فعال‌سازی/رد قرارداد دایرکت‌پی بدون Web SDK
+<h2 id="verify-contract">فعال‌سازی/رد قرارداد دایرکت‌پی روی وب</h2>
 
 برای امضای قرارداد توسط کاربر، می‌بایست کاربر را به `redirect_url` دریافتی از `init-contract` ریدایرکت کنید.  کاربر پس از امضای قرارداد به کلاینت
 مرچنت ریدایرکت می‌شود.
@@ -140,7 +140,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/direct-pay/co
 
 (در صورتی که redirect_url را در ای‌پی‌آی init-contract ارسال کرده‌اید، نیازی به ارسال دوباره‌ی آن نیست.)
 
-### نمونه
+<h3 id="verify-contract-sample">نمونه</h3>
 
 ```yaml
 QueryParams:
@@ -168,81 +168,17 @@ QueryParams:
     description: مرچنت توسط این فیلد می‌تواند یک پیام اختصاصی به کاربر نمایش دهد.
 ```
 
-### نمونه آدرس
+<h3 id="verify-contract-sample-address">نمونه آدرس</h3>
 
 ```
 https://cafebazaar.ir/bazaar-pay/contract/direct-pay?contract_token={contract_token}&redirect_url={encoded_url}&phone={user_phone_number}&message={encoded_message}
 ```
 
-### فعال‌سازی/رد قرارداد دایرکت‌پی توسط Web SDK
-
-برای آغاز فلوی نهایی‌سازی قرارداد می‌بایست از sdk وب بازارپی استفاده نمایید.
-
-```typescript
-import {startFinalizeContractProccess} from 'bazaar-payment-sdk';
-
-startFinalizeContractProccess(contractToken, callBackUrl, phoneNumber)
-    .then(() => {
-        // The user will be redirected to the provided callBackUrl.
-    });
-```
-
-* با استفاده از تابع `startFinalizeContractProccess` پاپ‌آپ نهایی‌سازی قرارداد دایرکت‌پی باز می‌شود و پس از اتمام فرآیند
-  نهایی‌سازی، کلاینت به آدرس بازگشت (`callBackUrl`) ریدایرکت می‌شود.
-* پس از ریدایرکت کاربر می‌توانید با استفاده از اندپوینت `Trace Contract` از وضعیت نهایی قرارداد مطلع شوید.
-* امکان رد/تایید قراردادی که از قبل رد/تایید شده باشد مجددا وجود ندارد و در صورتی که کاربر اقدام به این عمل کند ارور
-  مناسب
-  آن مانند `این قرارداد قبلا فعال شده‌است و امکان تغییر وضعیت وجود ندارد.` نمایش داده می‌شود.
-
-#### startFinalizeContractProcess Arguments:
-
-```yaml
-arguments:
-  - name: contractToken
-    type: string
-  - name: callBackUrl
-    type: CallbackUrl
-  - name: phoneNumber
-    type: string
-```
-
-##### CallbackUrl Type
-
-```yaml
-CallbackUrl:
-  type: object
-  properties:
-    url:
-      type: string
-    method:
-      type: string
-      enum: [ post, get ]
-    data:
-      type: object
-      additionalProperties:
-        type: string
-  required:
-    - method
-    - data
-```
-
-##### CallbackUrl Interface
-
-```typescript
-interface CallbackUrl {
-    url?: string;
-    method: "post" | "get";
-    data: {
-        [propName: string]: string;
-    }
-}
-```
-
-## پیگیری قرارداد دایرکت‌پی
+<h2 id="trace-contract">پیگیری قرارداد دایرکت‌پی</h2>
 
 توسط این اندپوینت می‌توانید از وضعیت قرارداد مطلع شوید.
 
-### نمونه
+<h3 id="trace-contract-sample">نمونه</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -320,14 +256,14 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه cURL
+<h3 id="trace-contract-sample">نمونه cURL</h3>
 
 ```curl
 curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/trace/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
-### نمونه موفق پاسخ درخواست
+<h3 id="trace-contract-sample-success-response">نمونه موفق پاسخ درخواست</h3>
 
 ```json
 {
@@ -339,12 +275,12 @@ curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/trace/?c
 }
 ```
 
-## لغو قرارداد دایرکت‌پی
+<h2 id="cancel-contract">لغو قرارداد دایرکت‌پی</h2>
 
 توسط این اندپوینت مرچنت می‌تواند قراردادهای فعال کاربر را لغو کند.
 درصورت مواجه با خطاهای دسته‌ي ۴۰۰ می‌توانید با فراخوانی اندپوینت trace از وضعیت فعلی قرارداد مطلع شوید.
 
-### نمونه
+<h3 id="cancel-contract-sample">نمونه</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -392,14 +328,14 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه cURL
+<h3 id="cancel-contract-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/cancel/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
 --header 'Authorization: Token {merchant_token}' 
 ```
 
-## پرداخت با دایرکت‌پی
+<h2 id="payment">پرداخت با دایرکت‌پی</h2>
 
 نیاز است که قبل از فراخوانی این اندپوینت، قرارداد کاربر تایید (فعال) شده باشد. قبل از صدا زدن این اندپوینت باید توسط
 اندپوینت init checkout یک توکن چک‌اوت ساخته شده باشد تا بتوان عملیات پرداخت را با آن انجام داد. می‌توان از این توکن در
@@ -410,7 +346,7 @@ curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/cancel/?
 را برای استفاده مرچنت‌ها راحت‌تر نماید. علاوه بر آن مرچنت‌ها می‌توانند توسط مقداری که در جیسن آبجکت `code` که در رسپانس این
 ریکوئست و در صورت به خطا خوردن برگرداننده می‌شود، لاجیک مورد نظر خود را نوشته و از آن استفاده نمایند.
 
-### نمونه درخواست
+<h3 id="payment-sample">نمونه درخواست</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -476,7 +412,7 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه cURL
+<h3 id="payment-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/' \
@@ -494,7 +430,7 @@ curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/' \
   اتوماتیک کامیت (تایید خرید) انجام می‌شود. بنابراین بهتر است این اندپوینت بعد از ارائه‌ی محصول به کاربر و در یک تراکنش
   اتمیک فراخوانی گردد.
 
-## نمونه خطاها
+<h2 id="payment-sample-errors">نمونه خطاها</h2>
 
 ```yaml
 components:

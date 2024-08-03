@@ -1,6 +1,6 @@
-# پرداخت
+<h1 id="payment">پرداخت</h1>
 
-## ایجاد چک‌اوت توکن
+<h2 id="init-checkout">ایجاد چک‌اوت توکن</h2>
 
 ```yaml
 openapi: 3.1.0
@@ -74,7 +74,7 @@ components:
 
 در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
 
-### نمونه cURL
+<h3 id="init-checkout-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init/' \
@@ -86,7 +86,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init
 }'
 ```
 
-### نمونه پاسخ موفق درخواست
+<h3 id="init-checkout-sample-success-response">نمونه پاسخ موفق درخواست</h3>
 
 ```json
 {
@@ -95,52 +95,15 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init
 }
 ```
 
-## فلو پرداخت
+<h2 id="payment-flow">فلو پرداخت</h2>
 
-### Web SDK
-
-در ابتدا این پکیج را با توضیحاتی که در لینک زیر قرار دارد نصب کنید:
-
-[پکیج SDK وب](https://www.npmjs.com/package/@cafebazaar/payment-sdk)
-
-پس از گرفتن توکن چک‌اوت می‌بایست با استفاده از اسکریپت زیر پاپ‌آپ بازارپی برای کاربر باز شود.
-
-```typescript
-import {startPaymentProccess} from 'bazaar-payment-sdk';
-
-startPaymentProccess(checkoutToken, callBackUrl, phoneNumber)
-    .then(() => {
-        // code to execute when payment flow is finished.
-    });
-
-interface CallbackUrl {
-    url?: string;
-    method: "post" | "get";
-    data: {
-        [propName: string]: string;
-    }
-}
-```
-
-#### startPaymentProcess Arguments:
-
-```yaml
-arguments:
-  - name: checkoutToken
-    type: string
-  - name: callbackUrl
-    type: CallBackUrl
-  - name: phoneNumber
-    type: string
-```
-
-### Android SDK
+<h3 id="payment-flow-android">Android SDK</h3>
 
 برای پیاده‌سازی این نوع روش پراخت به آدرس زیر مراجعه کنید:
 
 [Android SDK Guide](https://github.com/cafebazaar/BazaarPay)
 
-### Without SDK
+<h3 id="payment-flow-web">Web</h3>
 
 در صورتی که پذیرنده به هر دلیلی امکان پیاده‌سازی SDK را نداشته باشد یا برای پلتفرم مورد نظر SDK وجود نداشته باشد،
 به‌صورت مستقیم می‌توان کاربر را به درگاه بازارپی هدایت کرد و پس از آنکه کاربر فلوی پرداخت را طی نمود، کاربر با وضعیت
@@ -166,7 +129,7 @@ QueryParams:
     description: شماره تماس کاربر که برای سرعت بخشیدن به فرآیند لاگین به صورت خودکار پر می‌شود
 ```
 
-#### نمونه استفاده از آدرس پرداخت
+<h4 id="payment-flow-web-sample">نمونه استفاده از آدرس پرداخت</h4>
 
 این آدرس توسط درخواست `/checkout/init/` برگرداننده می‌شود.
 
@@ -186,7 +149,7 @@ https://{base_url}{base_path}/payment?token=checkout_token&phone=user_phone_numb
 https://cafebazaar.ir/bazaar-pay/payment?token=3258455376&phone=09123456789&redirect_url=https://bazaar-pay.ir
 ```
 
-## تایید خرید
+<h2 id="commit">تایید خرید</h2>
 
 صدا زدن این اندپوینت به منزله اعلام صحت ارائه‌ی محصول یا خدمت توسط پذیرنده به کاربر است. با صدا زدن این اندپوینت تراکنش
 ثبت شده نهایی شده و در صورت عدم صدا زدن این اندپوینت کل مبلغ تراکنش به صورت خودکار به کیف پول کاربر بعد از چند دقیقه باز
@@ -235,7 +198,7 @@ components:
 
 در صورت نیاز به فعال شدن احراز‌هویت در این‌ ای‌پی‌آی برای مرچنت شما،‌به تیم بازارپی اطلاع دهید.
 
-### نمونه cURL
+<h3 id="commit-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/commit/' \
@@ -246,7 +209,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/commit/' \
 
 ```
 
-## بازگشت کامل/جزیی خرید
+<h2 id="refund">بازگشت کامل/جزیی خرید</h2>
 
 ```yaml
 openapi: 3.1.0
@@ -296,7 +259,7 @@ components:
 * به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این اندپوینت
   خواهد بود.
 
-### نمونه cURL
+<h3 id="refund-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/refund/' \
@@ -307,7 +270,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/refund/' \
 }'
 ```
 
-## پیگیری خرید
+<h2 id="trace">پیگیری خرید</h2>
 
 ```yaml
 openapi: 3.1.0
@@ -358,7 +321,7 @@ paths:
           $ref: './fa/shared-components/error-responses.md#/responses/503'
 ```
 
-### نمونه cURL
+<h3 id="trace-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/trace/' \
@@ -368,7 +331,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/trace/' \
   }'
 ```
 
-### نمونه پاسخ موفق درخواست
+<h3 id="trace-sample-success-response">نمونه پاسخ موفق درخواست</h3>
 
 ```json
 {
@@ -376,7 +339,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/trace/' \
 }
 ```
 
-## گزارش وضعیت چک‌اوت‌ها
+<h2 id="get-checkouts-status">گزارش وضعیت چک‌اوت‌ها</h2>
 
 ```yaml
 openapi: 3.1.0
@@ -484,7 +447,7 @@ components:
   فیلد
   payment_datetime باشند. پس در نتیجه فقط checkout هایی که پرداخت شده‌اند در خروجی نمایش داده می‌شوند.
 
-### نمونه cURL
+<h3 id="get-checkouts-status-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts-status/' \
@@ -494,7 +457,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts
 }'
 ```
 
-### نمونه پاسخ موفق درخواست
+<h3 id="get-checkouts-status-sample-success-response">نمونه پاسخ موفق درخواست</h3>
 
 ```json
 {

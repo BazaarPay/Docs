@@ -1,4 +1,4 @@
-# احراز هویت کاربر به واسطه‌ی پذیرنده
+<h1 id="login-by-merchant">احراز هویت کاربر به واسطه‌ی پذیرنده<h1>
 
 در این فرایند کاربر به جای احراز هویت (لاگین) در بازارپی، در سایت یا اپلیکیشن پذیرنده (merchant) احراز هویت شده
 و سپس شماره‌ی همراه وی توسط پذیرنده به بازارپی ارسال می‌شود تا برای این شماره‌ی همراه،
@@ -34,7 +34,7 @@ sequenceDiagram
     Note over مرچنت, بازارپی: Commit
 ```
 
-## دریافت توکن دسترسی برای کاربر از سمت پذیرنده
+<h2 id="create-user-access-token">دریافت توکن دسترسی برای کاربر از سمت پذیرنده<h2>
 
 پذیرنده بعد از احراز هویت کاربر در سایت خود، می‌تواند از طریق
 اندپوینت `create-user-access-token`، برای شماره همراه کاربر توکن دسترسی دریافت نماید.
@@ -46,7 +46,7 @@ sequenceDiagram
 
 در صورتی که از توکن ایجادشده در محدوده‌ی دیگری استفاده کنید با خطای ۴۰۳ مواجه خواهید شد.
 
-### نمونه درخواست
+<h3 id="create-user-access-token-sample">نمونه درخواست<h3>
 
 ```yaml
 openapi: 3.1.0
@@ -113,7 +113,7 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه cURL
+<h3 id="create-user-access-token-sample-curl">نمونه cURL<h3>
 
 ```curl
 curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-access-token/' \
@@ -125,7 +125,7 @@ curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-acc
 }'
 ```
 
-### نمونه موفق پاسخ درخواست
+<h3 id="create-user-access-token-sample-success-response">نمونه موفق پاسخ درخواست<h3>
 
 ```json
 {
@@ -137,29 +137,23 @@ curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-acc
 باید فرایند پرداخت را بدون توکن دسترسی اتوماتیک ادامه دهد.
 این اتفاق ممکن است به خاطر غیرفعال‌شدن موقتی قابلیت احراز هویت اتوماتیک به دلایل فنی رخ بدهد.
 
-## احراز هویت خودکار در پلتفرم اندروید
+<h2 id="auto-login-android">احراز هویت خودکار در پلتفرم اندروید<h2>
 
 برای دیدن نحوه‌ی احراز هویت اتوماتیک در SDK اندروید،
 به [مستندات مربوط به sdk](https://github.com/cafebazaar/BazaarPay#2-launch-payment) مراجعه کنید.
 
-## احراز هویت خودکار در پلتفرم وب
-
-### احراز هویت با SDK وب
-
-این روش در آینده پیاده‌سازی خواهد شد.
-
-### احراز هویت بدون SDK وب
+<h2 id="auto-login-web">احراز هویت خودکار در پلتفرم وب<h2>
 
 این سرویس با استفاده از کوئری پارام، توکن احراز هویت کاربر را دریافت کرده و فرآیندهای مورد نظر را با استفاده از توکن
 احراز هویت شده، انجام می‌دهد.
 
-#### فراخوانی مستقیم وب‌سرویس
+<h4 id="direct-call">فراخوانی مستقیم وب‌سرویس</h4>
 
 در هر انتری پوینت از وب‌سرویس با پاس دادن کوئری پارام `auto_login_token`، وب‌سرویس روش احراز هویت را اتولاگین تشخیص داده
 و تا انتهای فرآیند مورد نظر،ِ کاربر با آن توکن احراز هویت خواهد شد. این نکته را در نظر بگیرید که مقدار این کوئری پارام
 را باید توسط `access_token` که در اندپوینت `create-user-access-token` برگرداننده می‌شود مقداردهی نمایید.
 
-#### ساختار کوئری پارام
+<h4 id="direct-call-query-params">ساختار کوئری پارام</h4>
 
 ```yaml
 queryParams:
@@ -170,30 +164,30 @@ queryParams:
     example: eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
 ```
 
-#### نمونه آدرس پرداخت بدون احراز هویت خودکار
+<h4 id="normal-auth-payment-sample-address">نمونه آدرس پرداخت بدون احراز هویت خودکار</h4>
 
 ```
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}
 ```
 
-#### نمونه آدرس پرداخت با احراز هویت خودکار
+<h4 id="auto-login-payment-sample-address">نمونه آدرس پرداخت با احراز هویت خودکار</h4>
 
 ```
 https://{base_url}{base_path}/payment?token={checkout_token}&redirect_url={merchant_redirect_url}&auto_login_token={auto_login_token}
 ```
 
-#### نمونه استفاده از احراز هویت خودکار
+<h4 id="auto-login-payment-sample-address-usage">نمونه استفاده از احراز هویت خودکار</h4>
 
 ```
-https://cafebazaar.ir/bazaar-pay/payment?token=2220203584&redirect_url=https://bazaar-pay.ir&auto_login_token=eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
+https://app.bazaar-pay.ir/payment?token=2220203584&redirect_url=https://bazaar-pay.ir&auto_login_token=eyJhwGciOsJIUzIdiIsInf5cCI6vIkfXrwJ9.eyJpc3MeOiJiYrwYqwYceirC
 ```
 
-## دریافت شماره همراه کاربر از روی توکن دسترسی
+<h2 id="get-user-phone-from-access-token">دریافت شماره همراه کاربر از روی توکن دسترسی</h2>
 
 کلاینت و sdkها می‌توانند برای به‌دست‌آوردن شماره‌ی همراه کاربر از روی توکن دسترسی
 و نمایش شماره‌ی همراه در UI، از اندپوینت `user/info/` استفاده کنند.
 
-### نمونه درخواست
+<h3 id="get-user-phone-from-access-token-sample">نمونه درخواست</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -231,7 +225,7 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-### نمونه cURL
+<h3 id="get-user-phone-from-access-token-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl 'https://api.bazaar-pay.ir/badje/v1/user/info/' \
@@ -239,7 +233,7 @@ curl 'https://api.bazaar-pay.ir/badje/v1/user/info/' \
      --header 'Accept: application/json'
 ```
 
-### نمونه موفق پاسخ درخواست
+<h3 id="get-user-phone-from-access-token-sample-success-response">نمونه موفق پاسخ درخواست</h3>
 
 ```json
 {
@@ -247,7 +241,7 @@ curl 'https://api.bazaar-pay.ir/badje/v1/user/info/' \
 }
 ```
 
-## نمونه خطاها
+<h3 id="get-user-phone-from-access-token-sample-errors">نمونه خطاها</h3>
 
 ```yaml
 components:
