@@ -8,6 +8,7 @@
 3. [پیگیری قرارداد دایرکت‌پی](#trace-contract)
 4. [لغو قرارداد دایرکت‌پی](#cancel-contract)
 5. [پرداخت با دایرکت‌پی](#payment)
+6. [دریافت موجودی با دایرکت‌پی](#get-balance)
 
 <h2 id="init-contract">ایجاد توکن قرارداد دایرکت‌پی</h2>
 
@@ -652,4 +653,89 @@ components:
             value:
               detail: "کاربر مجاز به انتخاب این درگاه نمی‌باشد."
               code: "error"
+```
+
+<h2 id="get-balance">دریافت موجودی با دایرکت‌پی</h2>
+
+برای صدا زدن این اندپوینت شما نیاز به توکن دایرکت‌پی کاربر دارید که از نوع کیف پول باشد و در خروجی مقدار قابل پرداخت با این توکن تا انتهای دوره جاری و موجودی کاربر را دریافت خواهید کرد.
+
+<h3 id="get-balance-sample">نمونه درخواست</h3>
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Cancel Directpay Contract API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path_v1}'
+    description: BazaarPay API v1
+paths:
+  /direct-pay/contract/payable-amount/:
+    get:
+      summary: get-balance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contract_token:
+                  type: string
+                  required: true
+                  example: 9bb790a3-44fd-486f-8ce8-38aa0scab069
+                  description: "توکن قرارداد گرفته شده از اندپوینت Init Contract"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payable_amount:
+                    type: integer
+                    example: 120000
+                    description: "مبلغ(ریال) قابل پرداخت با این توکن تا انتهای دوره جاری"
+                  payable_amount_string:
+                    type: string
+                    example: "۱۲،۰۰۰ تومان"
+                    description: "مبلغ(تومان) مجاز قابل پرداخت دوره جاری به فارسی"
+                  user_balance:
+                    type: integer
+                    example: 220000
+                    description: "موجودی کاربر قرارداد به ریال"
+                  user_balance_string:
+                    type: string
+                    example: "۲۲،۰۰۰ تومان"
+                    description: "موجودی کاربر قرارداد به تومان و فارسی"
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
+```
+
+<h3 id="get-balance-sample">نمونه cURL</h3>
+
+```curl
+curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/payable-amount/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
+--header 'Authorization: Token {merchant_token}' 
+```
+
+<h3 id="get-balance-sample-success-response">نمونه موفق پاسخ درخواست</h3>
+
+```json
+{
+	"payable_amount": 120000,
+	"payable_amount_string": "۱۲،۰۰۰ تومان",
+	"user_balance": 220000,
+	"user_balance_string": "۲۲،۰۰۰ تومان"
+}
 ```
