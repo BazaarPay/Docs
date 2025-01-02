@@ -664,14 +664,14 @@ components:
 ```yaml
 openapi: 3.1.0
 info:
-  title: Cancel Directpay Contract API
+  title: Get User Balance And Payable Amount from Directpay Contract API
   version: 1.0.0
 servers:
   - url: 'https://{base_url}{base_path_v1}'
     description: BazaarPay API v1
 paths:
   /direct-pay/contract/payable-amount/:
-    get:
+    post:
       summary: get-balance
       requestBody:
         content:
@@ -725,8 +725,12 @@ components:
 <h3 id="get-balance-sample">نمونه cURL</h3>
 
 ```curl
-curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/payable-amount/?contract_token=af72319b-9bae-4c2b-9cbf-76cs119a4582' \
---header 'Authorization: Token {merchant_token}' 
+curl --location 'https://api.bazaar-pay.ir/badje/v1/direct-pay/contract/payable-amount/' \
+--header 'Authorization: Token {merchant_token}' \
+--header 'Content-Type: application/json' \
+--data '{
+    "contract_token": "7e3257a7-cfec-4f75-b80b-443a57a255f4"
+}'
 ```
 
 <h3 id="get-balance-sample-success-response">نمونه موفق پاسخ درخواست</h3>
