@@ -15,3 +15,4 @@ We also provide [direct payment service](./fa/direct-pay.md) for easier payments
 Merchants can also [integrate BazaarPay wallet](./fa/wallet.md) into their applications.
 
 - [Persian Documentation](./fa/README.md)
+- [English Documentation](./en/README.md)
