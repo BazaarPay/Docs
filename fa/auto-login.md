@@ -1,4 +1,4 @@
-<h1 id="login-by-merchant">احراز هویت کاربر به واسطه‌ی پذیرنده<h1>
+<h1 id="login-by-merchant">احراز هویت کاربر به واسطه‌ی پذیرنده</h1>
 
 در این فرایند کاربر به جای احراز هویت (لاگین) در بازارپی، در سایت یا اپلیکیشن پذیرنده (merchant) احراز هویت شده
 و سپس شماره‌ی همراه وی توسط پذیرنده به بازارپی ارسال می‌شود تا برای این شماره‌ی همراه،
@@ -34,7 +34,7 @@ sequenceDiagram
     Note over مرچنت, بازارپی: Commit
 ```
 
-<h2 id="create-user-access-token">دریافت توکن دسترسی برای کاربر از سمت پذیرنده<h2>
+<h2 id="create-user-access-token">دریافت توکن دسترسی برای کاربر از سمت پذیرنده</h2>
 
 پذیرنده بعد از احراز هویت کاربر در سایت خود، می‌تواند از طریق
 اندپوینت `create-user-access-token`، برای شماره همراه کاربر توکن دسترسی دریافت نماید.
@@ -46,7 +46,7 @@ sequenceDiagram
 
 در صورتی که از توکن ایجادشده در محدوده‌ی دیگری استفاده کنید با خطای ۴۰۳ مواجه خواهید شد.
 
-<h3 id="create-user-access-token-sample">نمونه درخواست<h3>
+<h3 id="create-user-access-token-sample">نمونه درخواست</h3>
 
 ```yaml
 openapi: 3.1.0
@@ -113,7 +113,7 @@ components:
       $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
 ```
 
-<h3 id="create-user-access-token-sample-curl">نمونه cURL<h3>
+<h3 id="create-user-access-token-sample-curl">نمونه cURL</h3>
 
 ```curl
 curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-access-token/' \
@@ -125,7 +125,7 @@ curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-acc
 }'
 ```
 
-<h3 id="create-user-access-token-sample-success-response">نمونه موفق پاسخ درخواست<h3>
+<h3 id="create-user-access-token-sample-success-response">نمونه موفق پاسخ درخواست</h3>
 
 ```json
 {
@@ -137,12 +137,12 @@ curl --request POST 'https://api.bazaar-pay.ir/badje/v1/merchant/create-user-acc
 باید فرایند پرداخت را بدون توکن دسترسی اتوماتیک ادامه دهد.
 این اتفاق ممکن است به خاطر غیرفعال‌شدن موقتی قابلیت احراز هویت اتوماتیک به دلایل فنی رخ بدهد.
 
-<h2 id="auto-login-android">احراز هویت خودکار در پلتفرم اندروید<h2>
+<h2 id="auto-login-android">احراز هویت خودکار در پلتفرم اندروید</h2>
 
 برای دیدن نحوه‌ی احراز هویت اتوماتیک در SDK اندروید،
 به [مستندات مربوط به sdk](https://github.com/cafebazaar/BazaarPay#2-launch-payment) مراجعه کنید.
 
-<h2 id="auto-login-web">احراز هویت خودکار در پلتفرم وب<h2>
+<h2 id="auto-login-web">احراز هویت خودکار در پلتفرم وب</h2>
 
 این سرویس با استفاده از کوئری پارام، توکن احراز هویت کاربر را دریافت کرده و فرآیندهای مورد نظر را با استفاده از توکن
 احراز هویت شده، انجام می‌دهد.
