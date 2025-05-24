@@ -490,3 +490,94 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts
 	"previous": null
 }
 ```
+
+<h2 id="bank-refund">Full/Partial Refund (Wallet Refund + Bank Refund)</h2>
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Refund Checkout Token API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path_v3}'
+    description: BazaarPay API v3
+paths:
+  /bank-refund/:
+    post:
+      summary: Request for Wallet Refund + Bank Refund
+      security:
+        - ApiKeyAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkout_token:
+                  type: string
+                  description: The checkout token obtained from the `init-checkout` endpoint.
+                amount:
+                  type: integer
+                  description: The amount that needs to be refunded from the purchase. If not specified, the full amount will be refunded.
+                  required: false
+      responses:
+        '204':
+          description: refunded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refunded_to:
+                    type: string
+                    enum: [ wallet, bank ]
+                    description: Explains that the balance has been refunded to wallet and bank or only refunded to bank.
+        '202':
+          description: the request has been applied before
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+    get:
+      summary: Trace for Wallet Refund + Bank Refund
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - in: path
+          required: true
+          name: checkout_token
+          schema:
+            type: string
+          description: The checkout token obtained from the `init-checkout` endpoint.
+      responses:
+        '200':
+          description: refunded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bank_state:
+                    type: string
+                    enum: [ in_progress, successful, failed, not_started ]
+                    description: The `not_started` state means that the balance has been refunded to wallet only.
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
+```
+
+* It is idempotent only with respect to the checkout token.
+* Each checkout allows only a single refund. The refund amount will correspond to the amount specified in the first successful invocation of this endpoint.

@@ -90,8 +90,8 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init
 
 ```json
 {
-	"checkout_token": "0123456789",
-	"payment_url": "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
+  "checkout_token": "0123456789",
+  "payment_url": "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
 }
 ```
 
@@ -335,7 +335,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/trace/' \
 
 ```json
 {
-	"status": "paid_committed"
+  "status": "paid_committed"
 }
 ```
 
@@ -461,42 +461,134 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts
 
 ```json
 {
-	"checkouts": [
-		{
-			"token": "checkout_token1",
-			"amount": 90000,
-			"service_name": "service name 1",
-			"created_datetime": "2022-11-14T21:13:12.030613Z",
-			"status": "timed_out",
-			"payment_datetime": null,
-			"commit_datetime": null,
-			"refund_datetime": null,
-			"is_committed": true
-		},
-		{
-			"token": "checkout_token2",
-			"amount": 50000,
-			"service_name": "service name 2",
-			"created_datetime": "2022-11-14T21:13:12.030613Z",
-			"status": "paid_committed",
-			"payment_datetime": "2022-11-14T21:13:12.030613Z",
-			"commit_datetime": "2022-11-14T21:13:12.030613Z",
-			"refund_datetime": null,
-			"is_committed": false
-		},
-		{
-			"token": "checkout_token2",
-			"amount": 50000,
-			"service_name": "service name 2",
-			"created_datetime": "2022-11-14T21:13:12.030613Z",
-			"status": "refunded",
-			"payment_datetime": "2022-11-14T21:13:12.030613Z",
-			"commit_datetime": "2022-11-14T21:13:12.030613Z",
-			"refund_datetime": "2022-11-14T21:13:12.030613Z",
-			"is_committed": true
-		}
-	],
-	"next": "https://pardakht-secure.cafebazaar.org/pardakht/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
-	"previous": null
+  "checkouts": [
+    {
+      "token": "checkout_token1",
+      "amount": 90000,
+      "service_name": "service name 1",
+      "created_datetime": "2022-11-14T21:13:12.030613Z",
+      "status": "timed_out",
+      "payment_datetime": null,
+      "commit_datetime": null,
+      "refund_datetime": null,
+      "is_committed": true
+    },
+    {
+      "token": "checkout_token2",
+      "amount": 50000,
+      "service_name": "service name 2",
+      "created_datetime": "2022-11-14T21:13:12.030613Z",
+      "status": "paid_committed",
+      "payment_datetime": "2022-11-14T21:13:12.030613Z",
+      "commit_datetime": "2022-11-14T21:13:12.030613Z",
+      "refund_datetime": null,
+      "is_committed": false
+    },
+    {
+      "token": "checkout_token2",
+      "amount": 50000,
+      "service_name": "service name 2",
+      "created_datetime": "2022-11-14T21:13:12.030613Z",
+      "status": "refunded",
+      "payment_datetime": "2022-11-14T21:13:12.030613Z",
+      "commit_datetime": "2022-11-14T21:13:12.030613Z",
+      "refund_datetime": "2022-11-14T21:13:12.030613Z",
+      "is_committed": true
+    }
+  ],
+  "next": "https://pardakht-secure.cafebazaar.org/pardakht/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
+  "previous": null
 }
 ```
+
+<h2 id="bank-refund">بازگشت کامل/جزیی خرید (به کیف پول یا بانک)</h2>
+
+```yaml
+openapi: 3.1.0
+info:
+  title: Refund Checkout Token API
+  version: 1.0.0
+servers:
+  - url: 'https://{base_url}{base_path_v3}'
+    description: BazaarPay API v3
+paths:
+  /bank-refund/:
+    post:
+      summary: Request for Wallet Refund + Bank Refund
+      security:
+        - ApiKeyAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checkout_token:
+                  type: string
+                  description: The checkout token obtained from the `init-checkout` endpoint.
+                amount:
+                  type: integer
+                  description: The amount that needs to be refunded from the purchase. If not specified, the full amount will be refunded.
+                  required: false
+      responses:
+        '204':
+          description: refunded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refunded_to:
+                    type: string
+                    enum: [ wallet, bank ]
+                    description: Explains that the balance has been refunded to wallet and bank or only refunded to bank.
+        '202':
+          description: the request has been applied before
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/responses/401'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+    get:
+      summary: Trace for Wallet Refund + Bank Refund
+      security:
+        - ApiKeyAuth: [ ]
+      parameters:
+        - in: path
+          required: true
+          name: checkout_token
+          schema:
+            type: string
+          description: The checkout token obtained from the `init-checkout` endpoint.
+      responses:
+        '200':
+          description: refunded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bank_state:
+                    type: string
+                    enum: [ in_progress, successful, failed, not_started ]
+                    description: The `not_started` state means that the balance has been refunded to wallet only.
+        '401':
+          $ref: './fa/shared-components/error-responses.md#/'
+        '403':
+          $ref: './fa/shared-components/error-responses.md#/responses/403'
+        '400':
+          $ref: './fa/shared-components/error-responses.md#/responses/400'
+        '503':
+          $ref: './fa/shared-components/error-responses.md#/responses/503'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: './fa/shared-components/security.md#/securitySchemes/ApiKeyAuth'
+```
+
+* تنها نسبت به توکن چک‌اوت، idempotent است.
+* به ازای هر چک‌اوت، تنها یک بار می‌توان پول را بازگرداند و مقدار این بازگشت پول، برابر با اولین اجرای موفق این اندپوینت
+  خواهد بود.
