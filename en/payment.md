@@ -521,7 +521,7 @@ paths:
                   description: The amount that needs to be refunded from the purchase. If not specified, the full amount will be refunded.
                   required: false
       responses:
-        '204':
+        '202':
           description: refunded successfully
           content:
             application/json:
@@ -532,7 +532,7 @@ paths:
                     type: string
                     enum: [ wallet, bank ]
                     description: Explains that the balance has been refunded to wallet and bank or only refunded to bank.
-        '202':
+        '204':
           description: the request has been applied before
         '401':
           $ref: './fa/shared-components/error-responses.md#/responses/401'
