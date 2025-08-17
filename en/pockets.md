@@ -162,17 +162,23 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
-                    type: string
-                    format: uuid
-                  phone_number:
-                    type: string
-                  amount:
-                    type: integer
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        token:
+                          type: string
+                          format: uuid
+                        phone_number:
+                          type: string
+                        amount:
+                          type: integer
               example:
-                token: "01988f7a-d22b-7c3d-977f-27af99c2a5a5"
-                phone_number: "989120000000"
-                amount: 10000
+                results:
+                  - token: "01988f7a-d22b-7c3d-977f-27af99c2a5a5"
+                    phone_number: "989120000000"
+                    amount: 10000
         '401':
           $ref: './en/shared-components/error-responses.md#/responses/401'
         '403':
