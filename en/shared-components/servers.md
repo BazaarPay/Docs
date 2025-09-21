@@ -23,9 +23,9 @@ servers:
     description: BazaarPay Web
     variables:
       base_url:
-        default: 'cafebazaar.ir'
+        default: 'api.bazaar-pay.ir'
         description: BazaarPay web base URL
       base_path:
-        default: '/bazaar-pay'
-        description: BazaarPay we base PATH
-    example: 'https://cafebazaar.ir/bazaar-pay/contract/direct-pay'
+        default: '/'
+        description: BazaarPay web base PATH
+    example: 'https://app.bazaar-pay.ir/contract/direct-pay'

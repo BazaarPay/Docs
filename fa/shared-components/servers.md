@@ -23,9 +23,9 @@ servers:
     description: BazaarPay Web
     variables:
       base_url:
-        default: 'cafebazaar.ir'
+        default: 'api.bazaar-pay.ir'
         description: آدرس پایه وب بازارپی
       base_path:
-        default: '/bazaar-pay'
+        default: '/'
         description: مسیر پایه وب بازارپی
-    example: 'https://cafebazaar.ir/bazaar-pay/contract/direct-pay'
+    example: 'https://app.bazaar-pay.ir/contract/direct-pay'

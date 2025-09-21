@@ -85,7 +85,7 @@ paths:
         required: true
         schema:
           type: string
-          example: "https://cafebazaar.ir/bazaar-pay/increase-balance?redirect_url=https://bazaar-pay.ir"
+          example: "https://app.bazaar-pay.ir/increase-balance?redirect_url=https://bazaar-pay.ir"
         description: The address must be encoded as encodeURIComponent
 ```
 

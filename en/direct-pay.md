@@ -175,7 +175,7 @@ QueryParams:
 <h3 id="verify-contract-sample-address">Sample address</h3>
 
 ```
-https://cafebazaar.ir/bazaar-pay/contract/direct-pay?contract_token={contract_token}&redirect_url={encoded_url}&phone={user_phone_number}&message={encoded_message}
+https://app.bazaar-pay.ir/contract/direct-pay?contract_token={contract_token}&redirect_url={encoded_url}&phone={user_phone_number}&message={encoded_message}
 ```
 
 <h2 id="trace-contract">Tracing direct pay contract</h2>

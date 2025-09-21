@@ -57,7 +57,7 @@ paths:
                   payment_url:
                     type: string
                     format: url
-                    example: "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
+                    example: "https://app.bazaar-pay.ir/payment?token=0123456789"
         '401':
           $ref: './fa/shared-components/error-responses.md#/responses/401'
         '403':
@@ -91,7 +91,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/checkout/init
 ```json
 {
   "checkout_token": "0123456789",
-  "payment_url": "https://cafebazaar.ir/bazaar-pay/payment?token=0123456789"
+  "payment_url": "https://app.bazaar-pay.ir/payment?token=0123456789"
 }
 ```
 
@@ -146,7 +146,7 @@ https://{base_url}{base_path}/payment?token=checkout_token&phone=user_phone_numb
 مثال نمونه‌ی نهایی آن مانند زیر می‌شود:
 
 ```
-https://cafebazaar.ir/bazaar-pay/payment?token=3258455376&phone=09123456789&redirect_url=https://bazaar-pay.ir
+https://app.bazaar-pay.ir/payment?token=3258455376&phone=09123456789&redirect_url=https://bazaar-pay.ir
 ```
 
 <h2 id="commit">تایید خرید</h2>
@@ -496,7 +496,7 @@ curl --location --request POST 'https://api.bazaar-pay.ir/badje/v1/get-checkouts
       "is_committed": true
     }
   ],
-  "next": "https://pardakht-secure.cafebazaar.org/pardakht/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
+  "next": "https://api.bazaar-pay.ir/badje/v1/get-checkouts-status/?cursor=qweqweqweqwe",
   "previous": null
 }
 ```
