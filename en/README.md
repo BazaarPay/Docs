@@ -66,11 +66,6 @@ You can use the specific SDK for the Android platform. For more information, see
 
 [Implementing BazaarPay for Android Platform with Android SDK](./payment.md#payment-flow-android)
 
-<h2 id="login-by-merchant">User Authentication by Merchant</h2>
-To use the automatic authentication feature of BazaarPay by Merchant, you can refer to the following documentation:
-
-[User Authentication by Merchant](./auto-login.md)
-
 <h2 id="best-practice">Best Practices</h2>
 
 1. Protect your Authorization Token! Do not store it on the client side or any other service whose binary or source code is discoverable by your users.
