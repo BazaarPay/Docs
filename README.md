@@ -8,6 +8,7 @@ BazaarPay provides merchants with multiple payment solutions, and SDKs for easy 
 
 - [Android SDK](https://github.com/cafebazaar/BazaarPay)
 - SDK-Less Payment
+- [WordPress Plug-in](https://github.com/BazaarPay/WordPress-Plugin)
 
 We also provide [direct payment service](./fa/direct-pay.md) for easier payments and better user experience.
 
